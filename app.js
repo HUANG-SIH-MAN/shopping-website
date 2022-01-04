@@ -10,6 +10,7 @@ const port = process.env.port
 const exphbs = require('express-handlebars')
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
+app.use(express.static('public'))
 
 //路由設定
 const routes = require('./routers')
