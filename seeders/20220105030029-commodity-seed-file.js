@@ -3,12 +3,13 @@ const faker = require('faker')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    const imageData = await require('../commodityImageData')
     await queryInterface.bulkInsert('Commodities', 
-    Array.from({ length: 50 }).map(i =>({
+    Array.from({ length: 30 }).map((item, index) =>({
       name: faker.name.findName(),
       price: Math.floor(Math.random()*1000),
       introduction: faker.lorem.text(),
-      image:`https://loremflickr.com/320/240/product/?random=${Math.random() * 100}`,
+      image: imageData[index],
       saleAmount: 0,
       remainingNumber:Math.floor(Math.random()*100),
       viewCount: 0,
