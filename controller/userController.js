@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs')
+const passport = require('passport')
 const db = require('../models')
 const User = db.User
 
@@ -33,6 +34,13 @@ const userController = {
     loginPage: (req, res) => {
         return res.render('login')
     },
+    login: (req, res) => {
+        return res.render('/')
+    },
+    logout: (req, res) => {
+        req.logout()
+        res.redirect('/users/login')
+    }
 }
 
 module.exports = userController

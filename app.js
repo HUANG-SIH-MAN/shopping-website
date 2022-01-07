@@ -22,12 +22,16 @@ app.use(session({
     saveUninitialized: true 
 }))
 
+//passport 登入設定
+const usePassport = require('./config/passport')
+usePassport(app)
+
 //flash製作提示訊息
 const flash = require('connect-flash')
 app.use(flash())
 app.use((req, res, next) => {
-    // res.locals.isAuthenticated = req.isAuthenticated()
-    // res.locals.user = req.user
+    res.locals.isAuthenticated = req.isAuthenticated()
+    res.locals.user = req.user
     res.locals.error_msg = req.flash('error')
     res.locals.success_msg = req.flash('success')
     next()
