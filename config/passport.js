@@ -1,6 +1,9 @@
 const passport = require('passport') 
-const bcrypt = require('bcryptjs') 
-const LocalStrategy = require('passport-local').Strategy 
+const bcrypt = require('bcryptjs')
+const LocalStrategy = require('passport-local').Strategy
+const FacebookStrategy = require('passport-facebook') 
+const GoogleStrategy = require('passport-google-oauth20').Strategy 
+const TwitterStrategy = require('passport-twitter').Strategy
 const db = require('../models')
 const User = db.User
 
@@ -8,6 +11,7 @@ module.exports = app => {
     //初始化 
     app.use(passport.initialize()) 
     app.use(passport.session()) 
+
     //設定本地登入策略 
     passport.use(new LocalStrategy({ usernameField: 'email' , passReqToCallback: true } 
     ,(req, email, password, done) => { 
@@ -22,6 +26,89 @@ module.exports = app => {
         }) 
         .catch(err => done(err, false)) 
     })) 
+
+    //設定Facebook登入策略
+    passport.use(new FacebookStrategy({
+        clientID: process.env.FACEBOOK_ID,
+        clientSecret: process.env.FACEBOOK_SECRET,
+        callbackURL: process.env.FACEBOOK_CALLBACK,
+        profileFields: ['email', 'displayName']  
+    }, (accessToken, refreshToken, profile, done) => {
+        const { name, email } = profile._json
+        User.findOne({where: { email: email }})
+        .then(user => {
+            if (user) return done(null, user)
+            const randomPassword = Math.random().toString(36).slice(-8)
+            bcrypt
+            .genSalt(10)
+            .then(salt => bcrypt.hash(randomPassword, salt))
+            .then(hash => {
+                User.create({
+                    name,
+                    email,
+                    password: hash
+                })
+                .then(()=> done(null, user))
+                .catch(err => done(err, false))
+            })
+        })
+    }))
+
+    //設定Google登入策略
+    passport.use(new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK
+      },(accessToken, refreshToken, profile, cb) => {
+        const { name, email } = profile._json
+        User.findOne({where: { email: email }})
+        .then(user => {
+            if (user) return cb(null, user)
+            const randomPassword = Math.random().toString(36).slice(-8)
+            bcrypt
+            .genSalt(10)
+            .then(salt => bcrypt.hash(randomPassword, salt))
+            .then(hash => {
+                User.create({
+                    name,
+                    email,
+                    password: hash
+                })
+                .then(()=> cd(null, user))
+                .catch(err => cd(err, false))
+            })
+        })
+      }
+    ))
+
+    //設定twitter登入策略
+    passport.use(new TwitterStrategy({
+        consumerKey: process.env.TWITTER_CONSUMER_KEY,
+        consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+        userProfileURL: "https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true",
+        callbackURL: process.env.TWITTER_CALLBACK
+      },(token, tokenSecret, profile, cb) => {
+        const { name, email } = profile._json
+        User.findOne({where: { email: email }})
+        .then(user => {
+            if (user) return cb(null, user)
+            const randomPassword = Math.random().toString(36).slice(-8)
+            bcrypt
+            .genSalt(10)
+            .then(salt => bcrypt.hash(randomPassword, salt))
+            .then(hash => {
+                User.create({
+                    name,
+                    email,
+                    password: hash
+                })
+                .then(()=> cd(null, user))
+                .catch(err => cd(err, false))
+            })
+        })
+      }
+    ))
+
     //序列化/反序列化 
     passport.serializeUser((user, done) => { 
         done(null, user.id) 
