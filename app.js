@@ -38,6 +38,8 @@ app.use((req, res, next) => {
 })
 
 //路由設定
+const methodOverride = require('method-override')
+app.use(methodOverride('_method'))
 const routes = require('./routers')
 app.use(routes)
 app.listen(port ,()=>{

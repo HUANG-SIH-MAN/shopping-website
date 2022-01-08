@@ -1,0 +1,26 @@
+<div class="col-sm-8 showCommodity">
+<div class="card mt-5" style="max-width: 840px;">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img src="{{commodity.image}}" width="250" height="250">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{commodity.name}}</h5>
+        <p class="card-text">商品類別：{{commodity.Category.name}}</p>
+        <p>
+          <span class="mr-2">銷售量：{{commodity.saleAmount}}</span>
+          <span class="mr-2">庫存量：{{commodity.remainingNumber}}</span>
+          <span class="mr-2">瀏覽人數：{{commodity.viewCount}}</span>
+        </p>
+        <p class="card-text">商品介紹：{{commodity.introduction}}</p>
+      </div>
+      <div class="btn-group mb-4" role="group" aria-label="Basic example">
+          <a type="button" class="btn btn-primary" href="/admin/commodities">返回商品列表</a>
+          <a type="button" class="btn btn-success" href="/admin/commodity/{{commodity.id}}/edit">修改商品資料</a>
+          <a type="button" class="btn btn-danger">下架商品</a>
+      </div>
+    </div>
+  </div>
+</div>    
+</div>

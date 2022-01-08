@@ -29,3 +29,18 @@ body {
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 	border-radius: 20px;
 }
+
+/*後台商品總表頁面*/
+.commodityBody {
+	left: 15%;
+}
+
+.commodityLi {
+	background-color: rgb(255, 255, 255);
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+/*後台單一商品頁面*/
+.showCommodity {
+	left: 20%;
+}

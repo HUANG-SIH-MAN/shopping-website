@@ -1,0 +1,24 @@
+<div class="col-sm-8 commodityBody">
+    <ul class="list-unstyled">
+    {{#each commodity}}    
+    <li class="media commodityLi m-3">
+        <img src="{{this.image}}" class="mr-3" width="200" height="200">
+        <div class="media-body m-3">
+        <h5 class="mt-0 mb-3">{{this.name}}
+            <span class="badge badge-pill badge-dark mr-4"><small>{{this.Category.name}}</small></span>
+        </h5>
+        <p>價格：{{this.price}}</p>
+        <p>
+          <span class="mr-2">銷售量：{{this.saleAmount}}</span>
+          <span>庫存量：{{this.remainingNumber}}</span>
+        </p>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a type="button" class="btn btn-primary" href="/admin/commodity/{{this.id}}">詳細資訊</a>
+            <a type="button" class="btn btn-success" href="/admin/commodity/{{this.id}}/edit">修改商品資料</a>
+            <a type="button" class="btn btn-danger">下架商品</a>
+        </div>
+        </div>
+    </li>
+    {{/each}}
+    </ul>     
+</div>

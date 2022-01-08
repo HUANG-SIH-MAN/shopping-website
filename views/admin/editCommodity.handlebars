@@ -1,0 +1,43 @@
+<div class="col-lg-6 col-sm-8 loginBody mt-5 mb-5">
+    <div class="d-flex flex-column align-items-center mt-5">
+        <h1><img src="/image/food.png" width="50" height="50" class="mr-2">修改商品資料</h1>
+        <span class="text-danger">*為必填欄位</span>  
+    </div>
+    {{>message}}
+    <form action="/admin/commodity/{{commodity.id}}?_method=PUT" method="post">    
+        <div class="form-group row m-3">
+            <label for="name" class="col-sm-2 col-form-label">商品名稱<span class="text-danger">*</span>：</label>
+            <div class="col-sm-10">
+            <input type="text" class="form-control" id="name" name="name" placeholder="沐浴乳" value="{{commodity.name}}" required>
+            </div>
+        </div>
+        <div class="form-group row m-3">
+            <label for="price" class="col-sm-2 col-form-label">價格<span class="text-danger">*</span>：</label>
+            <div class="col-sm-10">
+            <input type="number" class="form-control" id="price" name="price" min="0" max="99999999" value="{{commodity.price}}" required>
+            </div>
+        </div>
+        <div class="form-group row m-3">
+            <label for="remainingNumber" class="col-sm-2 col-form-label">庫存量<span class="text-danger">*</span>：</label>
+            <div class="col-sm-10">
+            <input type="number" class="form-control" id="remainingNumber" name="remainingNumber" min="0" max="99999999" value="{{commodity.remainingNumber}}" required>
+            </div>
+        </div>
+        <div class="form-group row m-3">
+            <label for="introduction" class="col-sm-2 col-form-label">商品介紹<span class="text-danger">*</span>：</label>
+            <div class="col-sm-10">
+            <textarea class="form-control" rows="5" id="introduction" name="introduction" placeholder="優質產品，值得擁有" required>{{commodity.introduction}}</textarea>
+            </div>
+        </div>
+        <div class="form-group row m-3">
+            <label for="image" class="col-sm-2 col-form-label">商品圖片：</label>
+            <div class="col-sm-10">
+            <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
+            </div>
+        </div>                                                              
+        <div class="d-flex justify-content-center mt-5">
+            <button class="btn btn-outline-primary mb-5 mr-3" type="submit">確認修改</button>
+            <a class="btn btn-outline-success mb-5 mr-3" type="button" onclick="history.go(-1)">返回上一頁</a>
+        </div>
+    </form>
+</div>
