@@ -8,8 +8,9 @@ const port = process.env.port
 app.use(express.urlencoded({ extended: true }))
 
 //handlebars樣板設定
+const handlebarsHelper = require('./utils/handlebarsHelper')
 const exphbs = require('express-handlebars')
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.engine('handlebars', exphbs({ defaultLayout: 'main' , helpers: handlebarsHelper}))
 app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 

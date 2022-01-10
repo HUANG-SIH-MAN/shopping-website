@@ -3,7 +3,7 @@ const faker = require('faker')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const imageData = await require('../commodityImageData')
+    const imageData = await require('../utils/commodityImageData')
     await queryInterface.bulkInsert('Commodities', 
     Array.from({ length: 30 }).map((item, index) =>({
       name: faker.name.findName(),
