@@ -7,7 +7,11 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const adminController = {
     commoditiesPage: (req, res) => {
-        Commodity.findAll( { raw: true, nest: true, include: [ Category ] } ) 
+        Commodity.findAll({
+             raw: true, nest: true, 
+             where: { removed: false},
+             include: [ Category ] 
+            }) 
         .then(commodity => res.render('admin/commodities', { commodity }))
     },
     commodityPage: (req, res) => {
@@ -60,8 +64,8 @@ const adminController = {
         if (!file) {
             Commodity.update(
                 { name, price, remainingNumber, CategoryId, introduction }, 
-                { where: { id: req.params.id }
-            })
+                { where: { id: req.params.id }}
+            )
             .then(() => res.redirect(`/admin/commodity/${req.params.id}`))
         } else {
             fs.readFile(file.path, (err, data) => {
@@ -77,5 +81,33 @@ const adminController = {
             })
         }
     },
+    removedCommoditiesPage: (req, res) => {
+        Commodity.findAll({
+            raw: true, nest: true, 
+            where: { removed: true},
+            include: [ Category ] 
+           }) 
+       .then(commodity => res.render('admin/removedCommodities', { commodity }))
+    },
+    removedCommodity: (req, res) => {
+        Commodity.update(
+            { removed: true }, 
+            { where: { id: req.params.id }}
+        )
+        .then(()=> res.redirect('back'))
+    },
+    undoRemovedCommodity: (req, res) => {
+        Commodity.update(
+            { removed: false }, 
+            { where: { id: req.params.id }}
+        )
+        .then(()=> res.redirect('back'))
+    },
+    deleteCommodity: (req, res) => {
+        Commodity.destroy({ 
+            where: { id: req.params.id }
+        })
+        .then(()=> res.redirect('back'))
+    }
 }
 module.exports = adminController

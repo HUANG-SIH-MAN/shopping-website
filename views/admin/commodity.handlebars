@@ -18,7 +18,15 @@
       <div class="btn-group mb-4" role="group" aria-label="Basic example">
           <a type="button" class="btn btn-primary" href="/admin/commodities">返回商品列表</a>
           <a type="button" class="btn btn-success" href="/admin/commodity/{{commodity.id}}/edit">修改商品資料</a>
-          <a type="button" class="btn btn-danger">下架商品</a>
+          {{#if commodity.removed}}
+            <form action="/admin/commodity/undoRemoved/{{commodity.id}}?_method=PUT" method="post">
+                <button type="submit" class="btn btn-danger">上架商品</button>
+            </form>
+          {{else}}
+            <form action="/admin/commodity/removed/{{commodity.id}}?_method=PUT" method="post">
+              <button type="submit" class="btn btn-danger">下架商品</button>
+            </form>
+          {{/if}}
       </div>
     </div>
   </div>

@@ -40,6 +40,12 @@ body {
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
+.commodityTitle {
+	background-color: rgb(255, 255, 255);
+	border-radius: 20px;
+	width: 50%;
+}
+
 /*後台單一商品頁面*/
 .showCommodity {
 	left: 20%;

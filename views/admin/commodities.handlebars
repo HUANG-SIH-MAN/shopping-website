@@ -1,8 +1,11 @@
-<div class="col-sm-8 commodityBody">
-    <div class="btn-group btn-group-lg m-3 mt-4" role="group" aria-label="Basic example">
-    <a type="button" class="btn btn-primary" href="/admin/commodity/create">新增商品</a>
-    <a type="button" class="btn btn-danger">下架商品清單</a>
-    </div>
+<div class="col-sm-8 commodityBody">>
+    <div class="commodityTitle container d-flex flex-column align-items-center mt-2 mb-4 p-3">
+        <h1 class="display-4 mr-3">商品清單</h1>
+        <div class="btn-group m-2" role="group" aria-label="Basic example">
+        <a type="button" class="btn btn-primary" href="/admin/commodity/create">新增商品</a>
+        <a type="button" class="btn btn-danger" href="/admin/commodities/removed">下架商品清單</a>
+        </div>    
+    </div>    
     <ul class="list-unstyled">
     {{#each commodity}}    
     <li class="media commodityLi m-3">
@@ -19,7 +22,9 @@
         <div class="btn-group" role="group" aria-label="Basic example">
             <a type="button" class="btn btn-primary" href="/admin/commodity/{{this.id}}">詳細資訊</a>
             <a type="button" class="btn btn-success" href="/admin/commodity/{{this.id}}/edit">修改商品資料</a>
-            <a type="button" class="btn btn-danger">下架商品</a>
+            <form action="/admin/commodity/removed/{{this.id}}?_method=PUT" method="post">
+                <button type="submit" class="btn btn-danger">下架商品</button>
+            </form>
         </div>
         </div>
     </li>

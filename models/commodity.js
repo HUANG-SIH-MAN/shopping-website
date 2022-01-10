@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     saleAmount: DataTypes.INTEGER,
     remainingNumber: DataTypes.INTEGER,
-    viewCount: DataTypes.INTEGER
+    viewCount: DataTypes.INTEGER,
+    removed: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Commodity',

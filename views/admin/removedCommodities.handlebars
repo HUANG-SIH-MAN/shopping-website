@@ -1,0 +1,69 @@
+<div class="col-sm-8 commodityBody">
+    <div class="commodityTitle container d-flex flex-column align-items-center mt-5 mb-4 p-3">
+        <h1 class="display-4 mr-3">下架商品清單</h1>
+        <div class="btn-group m-2" role="group" aria-label="Basic example">
+        <a type="button" class="btn btn-primary" href="/admin/commodity/create">新增商品</a>
+        <a type="button" class="btn btn-success" href="/admin/commodities">商品清單</a>
+        </div>    
+    </div>
+    <ul class="list-unstyled">
+    {{#each commodity}}    
+    <li class="media commodityLi m-3">
+        <img src="{{this.image}}" class="mr-3" width="200" height="200">
+        <div class="media-body m-3">
+        <h5 class="mt-0 mb-3">{{this.name}}
+            <span class="badge badge-pill badge-dark mr-4"><small>{{this.Category.name}}</small></span>
+        </h5>
+        <p>價格：{{this.price}}</p>
+        <p>
+          <span class="mr-2">銷售量：{{this.saleAmount}}</span>
+          <span>庫存量：{{this.remainingNumber}}</span>
+        </p>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a type="button" class="btn btn-primary" href="/admin/commodity/{{this.id}}">詳細資訊</a>
+            <form action="/admin/commodity/undoRemoved/{{this.id}}?_method=PUT" method="post">
+                <button type="submit" class="btn btn-success">上架商品</button>
+            </form>
+            <button type="submit" class="btn btn-danger delete-confirm" data-toggle="modal" data-target="#exampleModal" data-id="{{this.id}}">刪除商品</button>
+        </div>
+        </div>
+    </li>
+    {{/each}}
+    </ul>     
+</div>
+
+
+<!-- Modal：警告使用者是否執行刪除功能 -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">是否刪除商品資料</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        注意!!刪除商品資料一旦刪除<strong class="text-danger">無法復原</strong>
+      </div>
+      <div class="modal-footer delete-commodity">
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('click', event => {
+    const target = event.target
+    if (target.matches('.delete-confirm')) {
+      const commodityID = target.dataset.id
+      const deleteCommodity = document.querySelector('.delete-commodity')
+      deleteCommodity.innerHTML += `
+        <form action="/admin/commodity/${commodityID}?_method=DELETE" method="post">
+          <button type="submit" class="btn btn-outline-danger">刪除</a>
+        </form>
+      `
+    }
+  })
+</script>
