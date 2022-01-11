@@ -46,9 +46,7 @@
       <div class="modal-body">
         注意!!刪除商品資料一旦刪除<strong class="text-danger">無法復原</strong>
       </div>
-      <div class="modal-footer delete-commodity">
-        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
-      </div>
+      <div class="modal-footer delete-commodity"></div>
     </div>
   </div>
 </div>
@@ -59,7 +57,8 @@
     if (target.matches('.delete-confirm')) {
       const commodityID = target.dataset.id
       const deleteCommodity = document.querySelector('.delete-commodity')
-      deleteCommodity.innerHTML += `
+      deleteCommodity.innerHTML = `
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
         <form action="/admin/commodity/${commodityID}?_method=DELETE" method="post">
           <button type="submit" class="btn btn-outline-danger">刪除</a>
         </form>

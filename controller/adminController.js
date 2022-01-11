@@ -145,6 +145,12 @@ const adminController = {
             { where: { id: req.params.id }}
         )
         .then(()=> res.redirect('/admin/categories'))
+    },
+    deleteCategory: (req, res) => {
+        Category.destroy({ 
+            where: { id: req.params.id }
+        })
+        .then(()=> res.redirect('back'))
     }
 }
 module.exports = adminController

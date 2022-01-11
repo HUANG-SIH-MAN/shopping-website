@@ -35,5 +35,7 @@ router.get('/category/:id/edit', adminController.editCategory)
 router.put('/category/:id', adminController.putCategory)
 //瀏覽單一類別
 router.get('/category/:id', adminController.categoryPage)
+//刪除類別
+router.delete('/category/:id', adminController.deleteCategory)
 
 module.exports = router

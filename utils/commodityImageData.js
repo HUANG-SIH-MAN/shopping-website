@@ -1,5 +1,5 @@
 const axios = require('axios')
-const unsplashAPIClientId = process.env.unsplashAPIClientId
+const unsplashAPIClientId = 'bHaNKB6nTirD4XG8EZWCKGgkeVMBauLyH7MlLGbRi5U'
 const searchItem = 'product'
 const url = `https://api.unsplash.com/search/photos/?client_id=${unsplashAPIClientId}&per_page=30&query=${searchItem}`
 module.exports = axios.get(url)

@@ -16,9 +16,7 @@
         <div class="btn-group ml-3" role="group" aria-label="Basic example">
             <a type="button" class="btn btn-primary" href="/admin/category/{{this.id}}">詳細資訊</a>
             <a type="button" class="btn btn-success" href="/admin/category/{{this.id}}/edit">更改名稱</a>
-            <form action="/admin/category/{{this.id}}/?_method=DELETE" method="post">
-                <button type="submit" class="btn btn-danger">刪除類別</button>
-            </form>
+            <button type="submit" class="btn btn-danger delete-confirm" data-toggle="modal" data-target="#exampleModal" data-id="{{this.id}}">刪除類別</button>
         </div>
         </div>
     </li>
@@ -26,3 +24,37 @@
     </ul>   
 
 </div>
+
+<!-- Modal：警告使用者是否執行刪除功能 -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">是否刪除類別資料</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        注意!!刪除類別資料一旦刪除<strong class="text-danger">所有該類別的商品資料皆無法復原</strong>
+      </div>
+      <div class="modal-footer delete-category"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('click', event => {
+    const target = event.target
+    if (target.matches('.delete-confirm')) {
+      const categoryID = target.dataset.id
+      const deleteCategory = document.querySelector('.delete-category')
+      deleteCategory.innerHTML = `
+        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+        <form action="/admin/category/${categoryID}?_method=DELETE" method="post">
+          <button type="submit" class="btn btn-outline-danger">刪除</a>
+        </form>
+      `
+    }
+  })
+</script>
