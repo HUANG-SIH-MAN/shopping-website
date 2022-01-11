@@ -61,3 +61,8 @@ body {
 	border-radius: 20px;
 	width: 50%;
 }
+
+/*前台首頁*/
+.categoryLi {
+	max-width: 200px;
+}
