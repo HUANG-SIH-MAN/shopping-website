@@ -5,7 +5,6 @@ const auth = require('./modules/auth')
 const user = require('./modules/user')
 const admin = require('./modules/admin')
 const { authenticator, authenticatedAdmin } = require('../middleware/auth')
-const req = require('express/lib/request')
 
 router.use('/auth', auth)
 router.use('/users', user)

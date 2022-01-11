@@ -38,4 +38,7 @@ router.get('/category/:id', adminController.categoryPage)
 //刪除類別
 router.delete('/category/:id', adminController.deleteCategory)
 
+//瀏覽使用者資料
+router.get('/users', adminController.usersPage)
+
 module.exports = router

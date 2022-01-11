@@ -1,0 +1,18 @@
+<div class="col-sm-8 showCategory">
+    <div class="categoryTitle container d-flex flex-column align-items-center mt-5 mb-5 p-3">
+        <h1 class="display-4 mr-3">顧客列表</h1> 
+    </div>
+    <ul class="list-unstyled mb-5">
+    {{#each customer}}    
+    <li class="media commodityLi m-3">
+        <img src="{{this.image}}" class="mr-3" width="200" height="200">
+        <div class="media-body m-3">
+            <h5 class="mt-0 mb-3">{{this.name}}</h5>
+            <p>電話：{{this.phone}}</p>
+            <p>信箱：{{this.email}}</p>
+            <p>地址：{{this.address}}</p>
+        </div>
+    </li>
+    {{/each}}
+    </ul>    
+</div>

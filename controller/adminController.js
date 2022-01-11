@@ -1,6 +1,7 @@
 const db = require('../models')
 const Commodity = db.Commodity
 const Category = db.Category
+const User = db.User
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -151,6 +152,13 @@ const adminController = {
             where: { id: req.params.id }
         })
         .then(()=> res.redirect('back'))
+    },
+    usersPage: (req, res) => {
+        User.findAll({
+            raw: true, nest: true,
+            where: { isAdmin: false }
+        })
+        .then(customer => res.render('admin/users', { customer }))
     }
 }
 module.exports = adminController
