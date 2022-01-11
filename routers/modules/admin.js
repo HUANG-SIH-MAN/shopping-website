@@ -25,7 +25,15 @@ router.put('/commodity/:id', upload.single('image'), adminController.putCommodit
 router.delete('/commodity/:id', adminController.deleteCommodity)
 
 //類別CRUD
+//瀏覽類別總表
 router.get('/categories', adminController.categoriesPage)
+//新增類別
+router.get('/category/create', adminController.createCategory)
+router.post('/category', adminController.postCategory)
+//修改類別
+router.get('/category/:id/edit', adminController.editCategory)
+router.put('/category/:id', adminController.putCategory)
+//瀏覽單一類別
 router.get('/category/:id', adminController.categoryPage)
 
 module.exports = router

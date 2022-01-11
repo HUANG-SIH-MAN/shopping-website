@@ -1,0 +1,18 @@
+<div class="col-lg-6 col-sm-8 loginBody mt-5 mb-5">
+    <div class="d-flex flex-column align-items-center mt-5">
+        <h1><img src="/image/options.png" width="50" height="50" class="mr-2">新增商品類別</h1>
+        <span class="text-danger">*為必填欄位</span>  
+    </div>
+    <form action="/admin/category" method="post">    
+        <div class="form-group row m-3">
+            <label for="name" class="col-sm-2 col-form-label">類別名稱<span class="text-danger">*</span>：</label>
+            <div class="col-sm-10">
+            <input type="text" class="form-control" id="name" name="name" placeholder="生活日用" required>
+            </div>
+        </div>                                                             
+        <div class="d-flex justify-content-center mt-5">
+            <button class="btn btn-outline-primary mb-5 mr-3" type="submit">新增商品類別</button>
+            <a class="btn btn-outline-success mb-5 mr-3" type="button" onclick="history.go(-1)">返回上一頁</a>
+        </div>
+    </form>
+</div>

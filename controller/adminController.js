@@ -125,6 +125,26 @@ const adminController = {
         .then(category => {
             return  res.render('admin/category', { category: category.toJSON() })
         })
+    },
+    createCategory: (req, res) => {
+        return res.render('admin/createCategory')
+    },
+    postCategory: (req, res) => {
+        Category.create({
+            name: req.body.name
+        })
+        .then(()=> res.redirect('/admin/categories'))
+    },
+    editCategory: (req, res) => {
+        Category.findByPk(req.params.id)
+        .then(category => res.render('admin/editCategory', { category: category.toJSON() }))
+    },
+    putCategory: (req, res) => {
+        Category.update(
+            { name: req.body.name },
+            { where: { id: req.params.id }}
+        )
+        .then(()=> res.redirect('/admin/categories'))
     }
 }
 module.exports = adminController
