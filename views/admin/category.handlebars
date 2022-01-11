@@ -1,0 +1,37 @@
+<div class="col-sm-8 showCategory">
+    <div class="categoryTitle container d-flex flex-column align-items-center mt-5 mb-5 p-3">
+        <h1 class="display-4 mr-3">{{category.name}}</h1>
+        <div class="btn-group m-2" role="group" aria-label="Basic example">
+            <a type="button" class="btn btn-primary mt-2" href="/admin/category/{{category.id}}/edit">更改類別名稱</a> 
+            <a type="button" class="btn btn-success mt-2" href="/admin/categories">返回商品類別</a> 
+        </div>
+    </div> 
+    <ul class="list-unstyled mb-5">
+    {{#each category.Commodities}}    
+    <li class="media commodityLi m-3">
+        <img src="{{this.image}}" class="mr-3" width="200" height="200">
+        <div class="media-body m-3">
+        <h5 class="mt-0 mb-3">{{this.name}}</h5>
+        <p>價格：{{this.price}}</p>
+        <p>
+          <span class="mr-2">銷售量：{{this.saleAmount}}</span>
+          <span>庫存量：{{this.remainingNumber}}</span>
+        </p>
+        <div class="btn-group" role="group" aria-label="Basic example">
+            <a type="button" class="btn btn-primary" href="/admin/commodity/{{this.id}}">詳細資訊</a>
+            <a type="button" class="btn btn-success" href="/admin/commodity/{{this.id}}/edit">修改商品資料</a>
+          {{#if this.removed}}
+            <form action="/admin/commodity/undoRemoved/{{this.id}}?_method=PUT" method="post">
+                <button type="submit" class="btn btn-warning">上架商品</button>
+            </form>
+          {{else}}
+            <form action="/admin/commodity/removed/{{this.id}}?_method=PUT" method="post">
+              <button type="submit" class="btn btn-danger">下架商品</button>
+            </form>
+          {{/if}}
+        </div>
+        </div>
+    </li>
+    {{/each}}
+    </ul>    
+</div>

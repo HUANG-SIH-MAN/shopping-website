@@ -108,6 +108,23 @@ const adminController = {
             where: { id: req.params.id }
         })
         .then(()=> res.redirect('back'))
+    },
+    categoriesPage: (req, res) => {
+        Category.findAll({
+            include: [ Commodity ] 
+        })
+        .then(category => {
+            const data = category.map(i => i.dataValues)
+            return  res.render('admin/categories', { category: data })
+        })
+    },
+    categoryPage: (req, res) => {
+        Category.findByPk(req.params.id, {
+            include: [ Commodity ]
+        })
+        .then(category => {
+            return  res.render('admin/category', { category: category.toJSON() })
+        })
     }
 }
 module.exports = adminController

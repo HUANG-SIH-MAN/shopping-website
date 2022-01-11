@@ -16,11 +16,11 @@
         <p class="card-text">商品介紹：{{commodity.introduction}}</p>
       </div>
       <div class="btn-group mb-4" role="group" aria-label="Basic example">
-          <a type="button" class="btn btn-primary" href="/admin/commodities">返回商品列表</a>
+          <a type="button" class="btn btn-primary" onclick="history.go(-1)">返回上一頁</a>
           <a type="button" class="btn btn-success" href="/admin/commodity/{{commodity.id}}/edit">修改商品資料</a>
           {{#if commodity.removed}}
             <form action="/admin/commodity/undoRemoved/{{commodity.id}}?_method=PUT" method="post">
-                <button type="submit" class="btn btn-danger">上架商品</button>
+                <button type="submit" class="btn btn-warning">上架商品</button>
             </form>
           {{else}}
             <form action="/admin/commodity/removed/{{commodity.id}}?_method=PUT" method="post">

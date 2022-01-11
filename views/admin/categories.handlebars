@@ -1,0 +1,28 @@
+<div class="col-sm-8 showCategory">
+    <div class="categoryTitle container d-flex flex-column align-items-center mt-5 mb-5 p-3">
+        <h1 class="display-4 mr-3">商品分類</h1>
+        <a type="button" class="btn btn-primary mt-2" href="/admin/category/create">新增商品類別</a> 
+    </div> 
+    <ul class="list-unstyled mb-5">
+    {{#each category}}    
+    <li class="media commodityLi m-3">
+        <div class="media-body m-3">
+        <h4 class="ml-3 mb-3">{{this.name}}</h4>
+        <div class="m-3">
+            {{#each this.Commodities}}
+            <a href="/admin/commodity/{{this.dataValues.id}}"><img src="{{this.dataValues.image}}" class="m-1" width="80" height="80"></a>
+            {{/each}}
+        </div>
+        <div class="btn-group ml-3" role="group" aria-label="Basic example">
+            <a type="button" class="btn btn-primary" href="/admin/category/{{this.id}}">詳細資訊</a>
+            <a type="button" class="btn btn-success" href="/admin/category/{{this.id}}/edit">更改名稱</a>
+            <form action="/admin/category/{{this.id}}/?_method=DELETE" method="post">
+                <button type="submit" class="btn btn-danger">刪除類別</button>
+            </form>
+        </div>
+        </div>
+    </li>
+    {{/each}}
+    </ul>   
+
+</div>

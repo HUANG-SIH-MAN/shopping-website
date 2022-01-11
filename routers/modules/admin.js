@@ -24,4 +24,8 @@ router.put('/commodity/:id', upload.single('image'), adminController.putCommodit
 //刪除商品
 router.delete('/commodity/:id', adminController.deleteCommodity)
 
+//類別CRUD
+router.get('/categories', adminController.categoriesPage)
+router.get('/category/:id', adminController.categoryPage)
+
 module.exports = router

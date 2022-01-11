@@ -50,3 +50,14 @@ body {
 .showCommodity {
 	left: 20%;
 }
+
+/*商品分類總表頁面*/
+.showCategory {
+	left: 15%;
+}
+
+.categoryTitle {
+	background-color: rgb(255, 255, 255);
+	border-radius: 20px;
+	width: 50%;
+}
