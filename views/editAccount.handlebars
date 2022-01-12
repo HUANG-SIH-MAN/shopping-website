@@ -1,0 +1,36 @@
+<div class="col-lg-6 col-sm-8 loginBody mt-5 mb-5">
+    <div class="d-flex flex-column align-items-center mt-5">
+        <h1><img src="/image/man.png" width="50" height="50" class="mr-2">修改個人資料</h1>
+        <span class="text-danger">*為必填欄位</span>  
+    </div>
+    <form action="/users/account/{{user.id}}?_method=PUT" method="post" enctype="multipart/form-data">    
+        <div class="form-group row m-3">
+            <label for="name" class="col-sm-2 col-form-label">姓名<span class="text-danger">*</span>：</label>
+            <div class="col-sm-10">
+            <input type="text" class="form-control" id="name" name="name" placeholder="王小明" value="{{user.name}}" required>
+            </div>
+        </div>
+        <div class="form-group row m-3">
+            <label for="phone" class="col-sm-2 col-form-label">電話號碼<span class="text-danger">*</span>：</label>
+            <div class="col-sm-10">
+            <input type="tel" class="form-control" id="phone" name="phone" placeholder="02-3415575" value="{{user.phone}}" maxlength="10" onkeyup="value=value.replace(/[^\d\-\d]/g,'')" required>
+            </div>
+        </div>
+        <div class="form-group row m-3">
+            <label for="address" class="col-sm-2 col-form-label">地址<span class="text-danger">*</span>：</label>
+            <div class="col-sm-10">
+            <input type="text" class="form-control" id="address" name="address" placeholder="台北市大安區建國南路一段3545號" value="{{user.address}}" required>
+            </div>
+        </div>
+        <div class="form-group row m-3">
+            <label for="image" class="col-sm-2 col-form-label">個人頭貼：</label>
+            <div class="col-sm-10">
+            <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
+            </div>
+        </div>                                                              
+        <div class="d-flex justify-content-center mt-5">
+            <button class="btn btn-outline-primary mb-5 mr-3" type="submit">確認修改</button>
+            <a class="btn btn-outline-success mb-5 mr-3" type="button" onclick="history.go(-1)">返回上一頁</a>
+        </div>
+    </form>
+</div>

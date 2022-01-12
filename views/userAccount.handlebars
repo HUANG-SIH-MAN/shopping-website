@@ -1,0 +1,18 @@
+<div class="col-sm-8 accountPage mt-5">
+    <div class="card mb-3 mt-3">
+    <div class="row no-gutters">
+        <div class="col-md-4">
+        <img src="{{user.image}}" width="250" height="250" class="ml-2">
+        </div>
+        <div class="col-md-8">
+        <div class="card-body">
+            <h3 class="card-title"><i class="fas fa-file-signature mr-2"></i>{{user.name}}帳戶資料</h3>
+            <p>電話：{{user.phone}}</p>
+            <p>信箱：{{user.email}}</p>
+            <p>地址：{{user.address}}</p>
+            <a type="button" class="btn btn-primary" href="/users/account/{{user.id}}/edit">修改個人資料</a>
+        </div>
+        </div>
+    </div>
+    </div>
+</div>

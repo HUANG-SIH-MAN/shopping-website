@@ -1,7 +1,9 @@
 const bcrypt = require('bcryptjs')
-const passport = require('passport')
 const db = require('../models')
 const User = db.User
+const fs = require('fs')
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const userController = {
     registerPage: (req, res) => {
@@ -41,6 +43,37 @@ const userController = {
         req.logout()
         req.flash('success', '已經成功登出')
         res.redirect('/users/login')
+    },
+    accountPage: (req, res) => {
+        User.findByPk(req.user.id)
+        .then(user => res.render('userAccount', { user: user.toJSON() }))
+    },
+    editAccount: (req, res) => {
+        User.findByPk(req.params.id)
+        .then(user => res.render('editAccount', { user: user.toJSON() }))
+    },
+    putAccount: (req, res) => {
+        const { file } = req
+        const { name, phone, address } = req.body
+        if (!file) {
+            User.update(
+                { name, phone, address }, 
+                { where: { id: req.params.id }}
+            )
+            .then(() => res.redirect('/users/account'))
+        } else {
+            fs.readFile(file.path, (err, data) => {
+                if (err) console.log('Error: ', err)
+                imgur.setClientID(IMGUR_CLIENT_ID)
+                imgur.upload(file.path, (err, img) => {
+                    return User.update(
+                        { name, phone, address, image: img.data.link }, 
+                        { where: { id: req.params.id }
+                    })
+                  .then(()=> res.redirect('/users/account'))
+              })
+            })
+        }    
     }
 }
 

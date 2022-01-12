@@ -66,3 +66,10 @@ body {
 .categoryLi {
 	max-width: 200px;
 }
+
+/*前台會員資料*/
+.accountPage {
+	left: 15%;
+	background-color: rgb(255, 255, 255);
+	border-radius: 20px;
+}

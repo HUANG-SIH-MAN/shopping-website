@@ -2,6 +2,11 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport') 
 const userController = require('../../controller/userController')
+const { authenticator } = require('../../middleware/auth')
+
+//上傳檔案設定
+const multer = require('multer')
+const upload = multer({ dest: 'temp/' })
 
 //註冊、登入、登出
 router.get('/register', userController.registerPage)
@@ -13,5 +18,10 @@ router.post('/login',passport.authenticate('local', {
     failureFlash: true
 }) ,userController.login)
 router.get('/logout', userController.logout)
+
+//會員帳號管理
+router.get('/account', authenticator, userController.accountPage)
+router.get('/account/:id/edit', authenticator, userController.editAccount)
+router.put('/account/:id', authenticator, upload.single('image'), userController.putAccount)
 
 module.exports = router
