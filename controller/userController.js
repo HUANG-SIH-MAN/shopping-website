@@ -39,6 +39,7 @@ const userController = {
     },
     logout: (req, res) => {
         req.logout()
+        req.flash('success', '已經成功登出')
         res.redirect('/users/login')
     }
 }

@@ -9,6 +9,14 @@
     </div>
 </div>
 <div class="col-sm-10 mt-3 mb-5">
+    {{#if searchError}}
+        <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+        {{ searchError }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+    {{/if}}
     <div class="row">
     {{#each commodity}}  
         <div class="card col-sm-6 col-lg-4 col-xl-3 m-2">
