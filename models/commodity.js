@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Commodity.belongsTo(models.Category)
+      Commodity.belongsToMany(models.User, {
+        through: models.Like,
+        foreignKey: 'CommodityId',
+        as: 'LikedUsers'
+      })
     }
   };
   Commodity.init({

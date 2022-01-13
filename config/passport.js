@@ -6,6 +6,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy
 const TwitterStrategy = require('passport-twitter').Strategy
 const db = require('../models')
 const User = db.User
+const Commodity = db.Commodity
 
 module.exports = app => { 
     //初始化 
@@ -114,8 +115,10 @@ module.exports = app => {
         done(null, user.id) 
     }) 
     passport.deserializeUser((id, done) => { 
-        User.findByPk(id) 
-          .then(user => done(null, user.toJSON())) 
-          .catch(err => done(err, null)) 
+        User.findByPk(id,{
+            include: [{ model: Commodity, as: 'LikedCommodities' }]
+        }) 
+        .then(user => done(null, user.toJSON())) 
+        .catch(err => done(err, null)) 
     }) 
 }
