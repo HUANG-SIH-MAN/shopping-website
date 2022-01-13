@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
+const Commodity = db.Commodity
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -45,8 +46,12 @@ const userController = {
         res.redirect('/users/login')
     },
     accountPage: (req, res) => {
-        User.findByPk(req.user.id)
-        .then(user => res.render('userAccount', { user: user.toJSON() }))
+        User.findByPk(req.user.id, {
+            include: [{ model: Commodity, as: 'LikedCommodities' }]
+        })
+        .then(user => {
+            return res.render('userAccount', { user: user.toJSON() })
+        })
     },
     editAccount: (req, res) => {
         User.findByPk(req.params.id)
@@ -74,6 +79,15 @@ const userController = {
               })
             })
         }    
+    },
+    likeCommoditiesPage: (req, res) => {
+        User.findByPk(req.user.id, {
+            include: [{ model: Commodity, as: 'LikedCommodities' }]
+        })
+        .then(user => {
+            console.log(user.toJSON())
+            return res.render('likeCommodities', { user: user.toJSON() })
+        })
     }
 }
 

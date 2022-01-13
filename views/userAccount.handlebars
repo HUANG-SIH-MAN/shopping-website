@@ -16,3 +16,21 @@
     </div>
     </div>
 </div>
+<ul class="col-sm-8 list-unstyled mt-5 mb-5 accountUl">    
+    <li class="media commodityLi m-3">
+        <div class="media-body m-3">
+            <div class="d-flex justify-content-start align-items-center">
+               <h4 class="ml-3 mb-3 mt-3">我的最愛商品</h4>
+                <a type="button" class="btn btn-success ml-3" href="/users/likeCommodities">
+                    詳細資訊 <span class="badge badge-light ml-1">{{user.LikedCommodities.length}}</span>
+                </a> 
+            </div>
+            
+            <div class="m-3">
+                {{#each user.LikedCommodities}}
+                <a href="/commodity/{{this.id}}"><img src="{{this.image}}" class="m-1" width="80" height="80"></a>
+                {{/each}}
+            </div>
+        </div>
+    </li>
+</ul>

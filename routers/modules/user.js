@@ -23,5 +23,6 @@ router.get('/logout', userController.logout)
 router.get('/account', authenticator, userController.accountPage)
 router.get('/account/:id/edit', authenticator, userController.editAccount)
 router.put('/account/:id', authenticator, upload.single('image'), userController.putAccount)
+router.get('/likeCommodities', authenticator, userController.likeCommoditiesPage)
 
 module.exports = router
