@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'CommodityId',
         as: 'LikedUsers'
       })
+      Commodity.hasMany(models.Cart)
     }
   };
   Commodity.init({

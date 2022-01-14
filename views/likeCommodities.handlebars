@@ -5,7 +5,8 @@
         <a type="button" class="btn btn-primary" href="/users/account">個人資料</a>
         <a type="button" class="btn btn-danger" href="#">購買紀錄</a>
         </div>    
-    </div>    
+    </div> 
+    {{>message}}
     <ul class="list-unstyled mb-5">
     {{#each user.LikedCommodities}}    
     <li class="media commodityLi m-3">
@@ -20,7 +21,13 @@
         <p class="ellipsis">{{this.introduction}}</p>
         <div class="btn-group" role="group" aria-label="Basic example">
             <a type="button" class="btn btn-primary" href="/commodity/{{this.id}}">詳細資訊</a>
-            <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart"></i>加入購物車</button>
+            {{#if this.removed}}
+            <button type="button" class="btn btn-secondary"><i class="fas fa-shopping-cart mr-2"></i>商品已經下架，無法購買!!</button>
+            {{else}}
+            <form action="/cart/{{this.id}}" method="post">
+                <button type="submit" class="btn btn-success"><i class="fas fa-shopping-cart mr-2"></i>放入購物車</button>
+            </form>
+            {{/if}}
         </div>
         </div>
     </li>

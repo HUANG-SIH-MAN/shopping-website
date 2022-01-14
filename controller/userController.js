@@ -85,7 +85,6 @@ const userController = {
             include: [{ model: Commodity, as: 'LikedCommodities' }]
         })
         .then(user => {
-            console.log(user.toJSON())
             return res.render('likeCommodities', { user: user.toJSON() })
         })
     }

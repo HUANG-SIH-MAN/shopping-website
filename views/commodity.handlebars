@@ -1,5 +1,6 @@
 <div class="col-sm-8 showCommodity">
 <div class="card mt-5" style="max-width: 840px;">
+  {{>message}}
   <div class="row no-gutters">
     <div class="col-md-4">
       <img src="{{commodity.image}}" width="250" height="250">
@@ -27,7 +28,13 @@
               <button type="submit" class="btn btn-danger"><i class="fas fa-heart mr-1"></i>加入最愛</button>
             </form>
           {{/if}}
-          <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart mr-2"></i>放入購物車</button>
+          {{#if commodity.removed}}
+          <button type="button" class="btn btn-secondary"><i class="fas fa-shopping-cart mr-2"></i>商品已經下架，無法購買!!</button>
+          {{else}}
+          <form action="/cart/{{commodity.id}}" method="post">
+            <button type="submit" class="btn btn-success"><i class="fas fa-shopping-cart mr-2"></i>放入購物車</button>
+          </form>
+          {{/if}}
       </div>
     </div>
   </div>
