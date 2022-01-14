@@ -78,6 +78,7 @@ body {
 	left: 15%;
 }
 
+/*最愛商品介紹*/
 .ellipsis {
 	overflow: hidden;
 	display: -webkit-box;
@@ -85,4 +86,10 @@ body {
 	-webkit-line-clamp: 2; /*行數*/
 	-webkit-box-orient: vertical;
 	white-space: normal;
+}
+
+/*購物車清單*/
+.cartTable {
+	background-color: rgb(255, 255, 255);
+	border-radius: 20px;
 }

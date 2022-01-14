@@ -1,0 +1,53 @@
+<div class="col-sm-8 commodityBody">
+    <div class="commodityTitle container d-flex flex-column align-items-center mt-4 mb-5 p-3">
+        <h1 class="display-4 mr-3">購物車清單</h1>
+        <div class="btn-group m-2" role="group" aria-label="Basic example">
+        <a type="button" class="btn btn-primary" href="/users/account">個人資料</a>
+        <a type="button" class="btn btn-success" href="/users/likeCommodities">最愛商品</a>
+        </div>    
+    </div>
+    {{>message}}
+    <div class="cartTable p-3 mb-5">
+    <table class="table table-hover">
+    <thead>
+        <tr>
+        <th scope="col">圖片</th>
+        <th scope="col">商品名稱</th>
+        <th scope="col">價格</th>
+        <th scope="col">購買數量</th>
+        <th scope="col">刪除商品</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each cart}}
+        <tr>
+        <th scope="row"><a href="/commodity/{{this.Commodity.id}}" target="_blank"><img src="{{this.Commodity.image}}" width="80" height="80"></a></th>
+        <td>{{this.Commodity.name}}</td>
+        <td>{{this.Commodity.price}}</td>
+        <td>
+            <div class="d-flex justify-content-start align-items-center">
+            <form action="/cart/addQuantity/{{this.id}}?_method=PUT" method="post">
+                <button type="submit" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i></button>
+            </form>
+            <span class="m-3">{{this.quantity}}</span>
+            <form action="/cart/reduceQuantity/{{this.id}}?_method=PUT" method="post">
+                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-minus"></i></button>
+            </form>
+            </div>
+        </td>
+        <td>
+            <form action="/cart/{{this.id}}?_method=DELETE" method="post">
+                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt mr-2"></i>刪除</button>
+            </form>
+        </td>
+        </tr>
+        {{/each}}
+    </tbody>
+    </table>
+    <hr>
+    <div class="m-3">
+        <h4>總金額: {{totalAmount}}</h4>
+    </div>
+    </div>
+</div>
+
