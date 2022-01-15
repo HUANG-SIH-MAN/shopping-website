@@ -18,7 +18,8 @@ const commodityController = {
             const result = commodity.map(i =>({
                 ...i.dataValues,
                 Category: i.dataValues.Category.dataValues,
-                likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id)
+                likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id),
+                inCart: req.user.Carts.map(c => c.commodityId).includes(i.id)
             }))
             return res.render('index', { commodity: result, category, categoryId })
         })
@@ -48,7 +49,8 @@ const commodityController = {
             const result = commodity.map(i =>({
                 ...i.dataValues,
                 Category: i.dataValues.Category.dataValues,
-                likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id)
+                likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id),
+                inCart: req.user.Carts.map(c => c.commodityId).includes(i.id)
             }))
             return res.render('index', { commodity: result, category, categoryId })
         })
@@ -56,7 +58,6 @@ const commodityController = {
     searchCommodity: async (req, res) => {
         const category = await Category.findAll({raw: true, nest: true})
         Commodity.findAll({
-            raw: true, nest: true,
             where: { removed: false, name:{ [Op.like]: `%${req.body.name}%` } },
             include: [ Category ],
             order: [['viewCount', "DESC"]]
@@ -66,7 +67,13 @@ const commodityController = {
             if (commodity.length === 0) {
                 searchError = '搜尋不到相關產品!!請重新輸入關鍵字'
             }
-            return res.render('index', { commodity, category, searchError })
+            const result = commodity.map(i =>({
+                ...i.dataValues,
+                Category: i.dataValues.Category.dataValues,
+                likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id),
+                inCart: req.user.Carts.map(c => c.commodityId).includes(i.id)
+            }))
+            return res.render('index', { commodity: result, category, searchError })
         })
     },
     addLike: (req, res) => {

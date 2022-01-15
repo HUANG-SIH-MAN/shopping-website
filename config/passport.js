@@ -7,6 +7,7 @@ const TwitterStrategy = require('passport-twitter').Strategy
 const db = require('../models')
 const User = db.User
 const Commodity = db.Commodity
+const Cart = db.Cart
 
 module.exports = app => { 
     //初始化 
@@ -116,7 +117,10 @@ module.exports = app => {
     }) 
     passport.deserializeUser((id, done) => { 
         User.findByPk(id,{
-            include: [{ model: Commodity, as: 'LikedCommodities' }]
+            include: [
+                Cart,
+                { model: Commodity, as: 'LikedCommodities' }
+            ]
         }) 
         .then(user => done(null, user.toJSON())) 
         .catch(err => done(err, null)) 

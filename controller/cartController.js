@@ -9,9 +9,10 @@ const cartController = {
             where: { userId: req.user.id},
             include: [ Commodity ]
         })
-        .then(cart => {
-            const totalAmount = cart.map(i => i.quantity * i.Commodity.price).reduce((a,b)=> a + b)
-            return res.render('cart', { cart, totalAmount })
+        .then(cart => {  
+            const cartData = cart.filter(i => !i.Commodity.removed)
+            const totalAmount = cartData.map(i => i.quantity * i.Commodity.price).reduce((a,b)=> a + b)
+            return res.render('cart', { cart: cartData, totalAmount })
         })
     },
     addCommodity: (req, res) => {
@@ -37,9 +38,16 @@ const cartController = {
         })
     },
     addQuantity: (req, res) => {
-        Cart.findByPk(req.params.id)
+        Cart.findByPk(req.params.id,{
+            include: [ Commodity ]
+        })
         .then(cart => {
-            cart.increment({quantity: 1})
+            const data = cart.toJSON()
+            if (data.quantity >= data.Commodity.remainingNumber) {
+                req.flash('error', '訂購商品數量無法超過庫存量')
+            } else {
+                cart.increment({quantity: 1})
+            }      
             return res.redirect('back')
         })
     },

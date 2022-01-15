@@ -41,9 +41,13 @@
                             <button type="submit" class="btn btn-danger"><i class="fas fa-heart"></i></button>
                         </form>
                     {{/if}}
-                    <form action="/cart/{{this.id}}" method="post">
-                        <button type="submit" class="btn btn-success"><i class="fas fa-shopping-cart"></i></button>
-                    </form>
+                    {{#if this.inCart}}
+                        <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart mr-1"></i>已加入</button>
+                    {{else}}
+                        <form action="/cart/{{this.id}}" method="post">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-shopping-cart"></i></button>
+                        </form>
+                    {{/if}}
                 </div>
             </div>
         </div>  
