@@ -58,7 +58,7 @@ const commodityController = {
     searchCommodity: async (req, res) => {
         const category = await Category.findAll({raw: true, nest: true})
         Commodity.findAll({
-            where: { removed: false, name:{ [Op.like]: `%${req.body.name}%` } },
+            where: { removed: false, name:{ [Op.like]: `%${req.query.name}%` } },
             include: [ Category ],
             order: [['viewCount', "DESC"]]
         })
