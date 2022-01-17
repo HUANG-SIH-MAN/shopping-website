@@ -15,7 +15,9 @@ module.exports = {
       },
       commodityId: {
         type: Sequelize.INTEGER,
-        references: { model: 'Commodities',  key: 'id' }
+        references: { model: 'Commodities',  key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       userId: {
         type: Sequelize.INTEGER,
