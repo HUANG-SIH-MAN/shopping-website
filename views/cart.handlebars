@@ -45,8 +45,15 @@
     </tbody>
     </table>
     <hr>
-    <div class="m-3">
+    <div class="d-flex justify-content-start m-3">
         <h4>總金額: {{totalAmount}}</h4>
+        <form name="Newebpay" action="https://core.newebpay.com/MPG/mpg_gateway" method="post">
+            <input type='hidden' id='MerchantID' name='MerchantID' value='{{MerchantID}}'>
+            <input type='hidden' id='TradeInfo' name='TradeInfo' value='MS330146380'>
+            <input type='hidden' id='TradeSha' name='TradeSha' value='MS330146380'>
+            <input type='hidden' id='Version' name='Version' value='2.0'>
+           <button type="submit" value="Submit" class="btn btn-success ml-3"><i class="fas fa-shopping-cart mr-2"></i>結帳</button> 
+        </form>      
     </div>
     </div>
 </div>

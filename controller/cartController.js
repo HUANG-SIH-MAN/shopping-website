@@ -1,6 +1,7 @@
 const db = require('../models')
 const Cart = db.Cart
 const Commodity = db.Commodity
+const newebpay = require('../utils/newebpay')
 
 const cartController = {
     cartListPage: (req, res) => {
@@ -12,7 +13,7 @@ const cartController = {
         .then(cart => {  
             const cartData = cart.filter(i => !i.Commodity.removed)
             const totalAmount = cartData.map(i => i.quantity * i.Commodity.price).reduce((a,b)=> a + b)
-            return res.render('cart', { cart: cartData, totalAmount })
+            return res.render('cart', { cart: cartData, totalAmount, MerchantID: process.env.MerchantID })
         })
     },
     addCommodity: (req, res) => {

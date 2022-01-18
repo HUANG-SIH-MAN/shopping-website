@@ -4,7 +4,7 @@ const app = express()
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
-const port = process.env.port
+const PORT = process.env.PORT || 3000
 app.use(express.urlencoded({ extended: true }))
 
 //handlebars樣板設定
@@ -43,6 +43,6 @@ const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
 const routes = require('./routers')
 app.use(routes)
-app.listen(port ,()=>{
-    console.log(`localhost:${port}`)
+app.listen(PORT ,()=>{
+    console.log(`localhost:${PORT}`)
 })
