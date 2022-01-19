@@ -13,7 +13,9 @@ const cartController = {
         .then(cart => {  
             const cartData = cart.filter(i => !i.Commodity.removed)
             const totalAmount = cartData.map(i => i.quantity * i.Commodity.price).reduce((a,b)=> a + b)
-            return res.render('cart', { cart: cartData, totalAmount, MerchantID: process.env.MerchantID })
+            const payData = newebpay.getTradeInfo(totalAmount, req.user.email)
+            console.log(payData)
+            return res.render('cart', { cart: cartData, totalAmount, payData })
         })
     },
     addCommodity: (req, res) => {
