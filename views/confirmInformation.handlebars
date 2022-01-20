@@ -1,0 +1,11 @@
+
+    <div class="cartTable p-3 mb-5">
+        <hr>
+        <form name="Newebpay" action="{{payData.mpg_gateway}}" method="post">
+        <input type="hidden" id="MerchantID" name="MerchantID" value="{{payData.MerchantID}}">
+        <input type="hidden" id="TradeInfo" name="TradeInfo" value="{{payData.TradeInfo}}">
+        <input type="hidden" id="TradeSha" name="TradeSha" value="{{payData.TradeSha}}">
+        <input type="hidden" id="Version" name="Version" value="{{payData.Version}}">
+        <button type="submit" value="Submit" class="btn btn-success ml-3"><i class="fas fa-shopping-cart mr-2"></i>結帳</button> 
+        </form> 
+    </div>

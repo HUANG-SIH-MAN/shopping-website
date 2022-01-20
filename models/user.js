@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'LikedCommodities'
       })
       User.hasMany(models.Cart)
+      User.hasMany(models.Order)
     }
   };
   User.init({

@@ -1,0 +1,57 @@
+<div class="col-sm-8 commodityBody">
+    <div class="commodityTitle container d-flex flex-column align-items-center mt-4 mb-5 p-3">
+        <h1 class="display-4 mr-3">填寫訂單資料</h1>
+    </div>
+    <div class="cartTable p-3 mb-5">
+        <table class="table table-hover">
+        <thead>
+            <tr>
+            <th scope="col">圖片</th>
+            <th scope="col">商品名稱</th>
+            <th scope="col">價格</th>
+            <th scope="col">購買數量</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cart}}
+            <tr>
+            <th scope="row"><a href="/commodity/{{this.Commodity.id}}" target="_blank"><img src="{{this.Commodity.image}}" width="80" height="80"></a></th>
+            <td>{{this.Commodity.name}}</td>
+            <td>{{this.Commodity.price}}</td>
+            <td> <span class="m-3">{{this.quantity}}</span></td>
+            </tr>
+            {{/each}}
+        </tbody>
+        </table>
+        <hr>
+        <h4>總金額: {{totalAmount}}</h4>
+    </div>
+    <div class="cartTable mb-5 pt-4">
+        <h4 class="ml-3">訂購會員資料</h4>
+        <form action="/order/confirmInformation" method="post">    
+            <div class="form-group row m-3">
+                <label for="email" class="col-sm-2 col-form-label">聯絡信箱<span class="text-danger">*</span>：</label>
+                <div class="col-sm-10">
+                <input type="email" class="form-control" id="email" name="email" placeholder="root@gmail.com" value="{{user.email}}" required>
+                </div>
+            </div>
+            <div class="form-group row m-3">
+                <label for="phone" class="col-sm-2 col-form-label">聯絡電話<span class="text-danger">*</span>：</label>
+                <div class="col-sm-10">
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="02-3415575" value="{{user.phone}}" maxlength="10" onkeyup="value=value.replace(/[^\d\-\d]/g,'')" required>
+                </div>
+            </div>
+            <div class="form-group row m-3">
+                <label for="address" class="col-sm-2 col-form-label">寄送地址<span class="text-danger">*</span>：</label>
+                <div class="col-sm-10">
+                <input type="text" class="form-control" id="address" name="address" placeholder="台北市大安區建國南路一段3545號" value="{{user.address}}" required>
+                </div>
+            </div>
+            <input type="hidden" id="totalAmount" name="totalAmount" value="{{totalAmount}}">                                                             
+            <div class="d-flex justify-content-center mt-5">
+                <button class="btn btn-outline-primary mb-5 mr-3" type="submit">下一步</button>
+                <a class="btn btn-outline-success mb-5 mr-3" type="button" href="/cart">返回購物車</a>
+            </div>
+        </form>
+    </div>
+</div>
