@@ -54,8 +54,18 @@ const orderController = {
             const TradeInfo = JSON.parse(newebpay.decryptTradeInfoAES(req.body.TradeInfo))
             const orderId = Number(TradeInfo['Result']['MerchantOrderNo'])
             await Cart.destroy({where: {userId: req.user.id}})
-            await Order.findByPk(orderId)
-            .then(order => order.update({ status: true }))
+            await Order.findByPk(orderId, {include: [ OrderItem ]})
+            .then(async (order) => {
+                order.update({ status: true })
+                const orderItems = order.toJSON().OrderItems
+                for ( let i of orderItems) { 
+                    await Commodity.findByPk(i.commodityId)
+                    .then(commodity => {
+                        commodity.increment({ saleAmount: i.quantity })
+                        commodity.decrement({ remainingNumber: i.quantity })
+                    })
+                }
+            })
             return res.render('orderSucceed')
         }    
     }
