@@ -46,13 +46,17 @@ const commodityController = {
             order: [['viewCount', "DESC"]]
         })
         .then(commodity => {
+            let searchError = ''
+            if (commodity.length === 0) {
+                searchError = '該分類目前還沒有商品，請耐心等待商家上架!!'
+            }
             const result = commodity.map(i =>({
                 ...i.dataValues,
                 Category: i.dataValues.Category.dataValues,
                 likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id),
                 inCart: req.user.Carts.map(c => c.commodityId).includes(i.id)
             }))
-            return res.render('index', { commodity: result, category, categoryId })
+            return res.render('index', { commodity: result, category, categoryId, searchError })
         })
     },
     searchCommodity: async (req, res) => {

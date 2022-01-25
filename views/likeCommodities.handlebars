@@ -3,10 +3,11 @@
         <h1 class="display-4 mr-3">最愛商品清單</h1>
         <div class="btn-group m-2" role="group" aria-label="Basic example">
         <a type="button" class="btn btn-primary" href="/users/account">個人資料</a>
-        <a type="button" class="btn btn-danger" href="#">購買紀錄</a>
+        <a type="button" class="btn btn-danger" href="/order/records">購買紀錄</a>
         </div>    
     </div> 
     {{>message}}
+    {{#if user.LikedCommodities}}
     <ul class="list-unstyled mb-5">
     {{#each user.LikedCommodities}}    
     <li class="media commodityLi m-3">
@@ -32,5 +33,13 @@
         </div>
     </li>
     {{/each}}
-    </ul>     
+    </ul> 
+    {{else}} 
+        <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+        沒有最愛商品，趕快到商品頁面尋找吧!!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+    {{/if}}   
 </div>

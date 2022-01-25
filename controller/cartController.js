@@ -11,6 +11,9 @@ const cartController = {
             include: [ Commodity ]
         })
         .then(cart => {  
+            if (cart.length === 0) {
+                return res.render('cart', { cartError: '目前購物車沒有商品!!' })
+            }
             const cartData = cart.filter(i => !i.Commodity.removed)
             const totalAmount = cartData.map(i => i.quantity * i.Commodity.price).reduce((a,b)=> a + b)
             return res.render('cart', { cart: cartData, totalAmount })
