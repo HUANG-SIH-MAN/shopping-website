@@ -1,6 +1,14 @@
-
+<div class="col-sm-8 commodityBody">
+    <div class="commodityTitle container d-flex flex-column align-items-center mt-4 mb-5 p-3">
+        <h1 class="display-4 mr-3 mt-2">確認資料</h1>
+    </div>
     <div class="cartTable p-3 mb-5">
+        <h4 class="ml-3 mb-4">訂購會員資料</h4>
+        <p class="ml-3">聯絡信箱: {{email}}</p>
+        <p class="ml-3">聯絡電話: {{phone}}</p>
+        <p class="ml-3">寄送地址: {{address}}</p>
         <hr>
+        <h4 class="ml-3 mb-4">總金額: {{totalAmount}}</h4>
         <form name="Newebpay" action="{{payData.mpg_gateway}}" method="post">
         <input type="hidden" id="MerchantID" name="MerchantID" value="{{payData.MerchantID}}">
         <input type="hidden" id="TradeInfo" name="TradeInfo" value="{{payData.TradeInfo}}">
@@ -9,3 +17,4 @@
         <button type="submit" value="Submit" class="btn btn-success ml-3"><i class="fas fa-shopping-cart mr-2"></i>結帳</button> 
         </form> 
     </div>
+</div>

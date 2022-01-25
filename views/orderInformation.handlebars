@@ -1,6 +1,6 @@
 <div class="col-sm-8 commodityBody">
     <div class="commodityTitle container d-flex flex-column align-items-center mt-4 mb-5 p-3">
-        <h1 class="display-4 mr-3">填寫訂單資料</h1>
+        <h1 class="display-4 mr-3 mt-2">填寫訂單資料</h1>
     </div>
     <div class="cartTable p-3 mb-5">
         <table class="table table-hover">
@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            {{#each cart}}
+            {{#each cartData}}
             <tr>
             <th scope="row"><a href="/commodity/{{this.Commodity.id}}" target="_blank"><img src="{{this.Commodity.image}}" width="80" height="80"></a></th>
             <td>{{this.Commodity.name}}</td>
@@ -47,7 +47,7 @@
                 <input type="text" class="form-control" id="address" name="address" placeholder="台北市大安區建國南路一段3545號" value="{{user.address}}" required>
                 </div>
             </div>
-            <input type="hidden" id="totalAmount" name="totalAmount" value="{{totalAmount}}">                                                             
+            <input type="hidden" id="totalAmount" name="totalAmount" value="{{totalAmount}}">                                                            
             <div class="d-flex justify-content-center mt-5">
                 <button class="btn btn-outline-primary mb-5 mr-3" type="submit">下一步</button>
                 <a class="btn btn-outline-success mb-5 mr-3" type="button" href="/cart">返回購物車</a>

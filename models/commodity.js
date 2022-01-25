@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         as: 'LikedUsers'
       })
       Commodity.hasMany(models.Cart, { onDelete: 'cascade', hooks: true })
+      Commodity.hasMany(models.OrderItem)
     }
   };
   Commodity.init({

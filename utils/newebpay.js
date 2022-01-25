@@ -41,13 +41,13 @@ function encryptTradeShaAES(TradeInfo) {
 }
 
 const newebpay = {
-    getTradeInfo: (amount, email) => {
+    getTradeInfo: (amount, email, MerchantOrderNo) => {
         const data = {
             MerchantID,
             RespondType: 'JSON',
             TimeStamp: Math.floor(Date.now()/1000),
             Version: '2.0',
-            MerchantOrderNo: Date.now(),
+            MerchantOrderNo,
             Amt: amount,
             ItemDesc: '生活日用雜貨',
             Email: email,
