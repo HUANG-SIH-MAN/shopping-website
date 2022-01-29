@@ -8,6 +8,7 @@ const db = require('../models')
 const User = db.User
 const Commodity = db.Commodity
 const Cart = db.Cart
+const Order = db.Order
 
 module.exports = app => { 
     //初始化 
@@ -119,7 +120,8 @@ module.exports = app => {
         User.findByPk(id,{
             include: [
                 Cart,
-                { model: Commodity, as: 'LikedCommodities' }
+                { model: Commodity, as: 'LikedCommodities' },
+                Order
             ]
         }) 
         .then(user => done(null, user.toJSON())) 

@@ -1,3 +1,4 @@
+const moment = require('moment')
 const db = require('../models')
 const Cart = db.Cart
 const Commodity = db.Commodity
@@ -68,6 +69,25 @@ const orderController = {
             })
             return res.render('orderSucceed')
         }    
+    },
+    orderRecords: (req, res) => {
+        Order.findAll({
+            where: { userId: req.user.id, status: true },
+            include: [{ model: OrderItem, include: Commodity }],
+            order: [['updatedAt', "DESC"]]
+        })
+        .then(order => {
+            if (order.length === 0) {
+                return res.render('orderRecords', { orderRecordError: '並未購買任何商品!!' })
+            }
+            const orderData = order.map(i => ({
+                address: i.dataValues.address,
+                totalAmount: i.dataValues.totalAmount,
+                updatedAt: moment(i.dataValues.updatedAt).format('YYYY-MM-DD'),
+                OrderItems: i.dataValues.OrderItems.map(i => i.dataValues)
+            }))
+            return res.render('orderRecords', { order: orderData })
+        })
     }
 }
 

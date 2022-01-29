@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
 const Commodity = db.Commodity
+const Order = db.Order
+const moment = require('moment')
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -47,10 +49,12 @@ const userController = {
     },
     accountPage: (req, res) => {
         User.findByPk(req.user.id, {
-            include: [{ model: Commodity, as: 'LikedCommodities' }]
+            include: [ Order, { model: Commodity, as: 'LikedCommodities' }]
         })
         .then(user => {
-            return res.render('userAccount', { user: user.toJSON() })
+            const orderData = user.dataValues.Orders.map(i => i.dataValues).filter(i => i.status)
+            .map(i =>({ totalAmount: i.totalAmount , updatedAt: moment(i.updatedAt).format('YYYY-MM-DD')}))
+            return res.render('userAccount', { user: user.toJSON(), orderData })
         })
     },
     editAccount: (req, res) => {
