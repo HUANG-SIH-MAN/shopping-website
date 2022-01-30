@@ -1,6 +1,5 @@
 <div class="col-sm-8 showCommodity">
 <div class="card mt-5" style="max-width: 840px;">
-  {{>message}}
   <div class="row no-gutters">
     <div class="col-md-4">
       <img src="{{commodity.image}}" width="250" height="250">
@@ -20,23 +19,68 @@
       <div class="btn-group mb-4" role="group" aria-label="Basic example">
           <a type="button" class="btn btn-primary" onclick="history.go(-1)">返回上一頁</a>
           {{#if likedUser}}
-            <form action="/commodity/like/{{commodity.id}}?_method=DELETE" method="post">
-              <button type="submit" class="btn btn-secondary"><i class="fas fa-heart-broken mr-1"></i>移除最愛</button>
-            </form>          
+            <button type="button" class="btn btn-secondary removeLike" data-id="{{commodity.id}}"><i class="fas fa-heart-broken mr-1" data-id="{{commodity.id}}"></i>移除最愛</button>          
           {{else}}
-            <form action="/commodity/like/{{commodity.id}}" method="post">
-              <button type="submit" class="btn btn-danger"><i class="fas fa-heart mr-1"></i>加入最愛</button>
-            </form>
+            <button type="button" class="btn btn-danger addLike" data-id="{{commodity.id}}"><i class="fas fa-heart mr-1" data-id="{{commodity.id}}"></i>加入最愛</button>
           {{/if}}
           {{#if commodity.removed}}
-          <button type="button" class="btn btn-secondary"><i class="fas fa-shopping-cart mr-2"></i>商品已經下架，無法購買!!</button>
+            <button type="button" class="btn btn-secondary"><i class="fas fa-shopping-cart mr-2"></i>商品已經下架，無法購買!!</button>
+          {{/if}}
+          {{#if inCart}}
+            <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart mr-1"></i>已加入</button>
           {{else}}
-          <form action="/cart/{{commodity.id}}" method="post">
-            <button type="submit" class="btn btn-success"><i class="fas fa-shopping-cart mr-2"></i>放入購物車</button>
-          </form>
+            <button type="button" class="btn btn-success addCart" data-id="{{commodity.id}}"><i class="fas fa-shopping-cart mr-2" data-id="{{commodity.id}}"></i>放入購物車</button>
           {{/if}}
       </div>
     </div>
   </div>
 </div>    
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  document.addEventListener('click', event => {
+    const target = event.target
+    const commodityID = target.dataset.id
+    if (target.matches('.removeLike')) {
+      axios.post(`/commodity/like/${commodityID}?_method=DELETE`)
+      .then(()=> {
+          target.innerHTML = `<i class="fas fa-heart mr-1" data-id="${commodityID}"></i>加入最愛`
+          target.classList.remove('btn-secondary', 'removeLike')
+          target.classList.add('btn-danger', 'addLike')
+      })
+    } else if (target.matches('.fa-heart-broken')) {
+      axios.post(`/commodity/like/${commodityID}?_method=DELETE`)
+      .then(()=> {
+          target.parentElement.classList.remove('btn-secondary', 'removeLike')
+          target.parentElement.classList.add('btn-danger', 'addLike')
+          target.parentElement.innerHTML = `<i class="fas fa-heart mr-1" data-id="${commodityID}"></i>加入最愛`
+      })
+    } else if (target.matches('.addLike')) {
+      axios.post(`/commodity/like/${commodityID}?`)
+      .then(()=> {
+        target.innerHTML = `<i class="fas fa-heart-broken mr-1" data-id="${commodityID}"></i>移除最愛`
+        target.classList.remove('btn-danger', 'addLike')
+        target.classList.add('btn-secondary', 'removeLike')
+      })
+    } else if (target.matches('.fa-heart')) {
+      axios.post(`/commodity/like/${commodityID}?`)
+      .then(()=> {
+        target.parentElement.classList.remove('btn-danger', 'addLike')
+        target.parentElement.classList.add('btn-secondary', 'removeLike')
+        target.parentElement.innerHTML = `<i class="fas fa-heart-broken mr-1" data-id="${commodityID}"></i>移除最愛`
+      })
+    } else if (target.matches('.addCart')) {
+		  axios.post(`/cart/${commodityID}`)
+			.then(()=> {
+        target.classList.remove('addCart')
+        target.innerHTML = '<i class="fas fa-shopping-cart mr-1"></i>已加入'
+       })	
+    } else if (target.matches('.fa-shopping-cart')) {
+      axios.post(`/cart/${commodityID}`)
+			.then(()=> {
+        target.parentElement.classList.remove('addCart')
+        target.parentElement.innerHTML = '<i class="fas fa-shopping-cart mr-1"></i>已加入'
+      })
+    }
+  })
+</script>

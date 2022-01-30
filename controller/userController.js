@@ -3,6 +3,7 @@ const db = require('../models')
 const User = db.User
 const Commodity = db.Commodity
 const Order = db.Order
+const Cart = db.Cart
 const moment = require('moment')
 const fs = require('fs')
 const imgur = require('imgur-node-api')
@@ -86,10 +87,13 @@ const userController = {
     },
     likeCommoditiesPage: (req, res) => {
         User.findByPk(req.user.id, {
-            include: [{ model: Commodity, as: 'LikedCommodities' }]
+            include: [ Cart, { model: Commodity, as: 'LikedCommodities' }]
         })
         .then(user => {
-            return res.render('likeCommodities', { user: user.toJSON() })
+            const cartItem = user.toJSON().Carts.map(i => i.commodityId)
+            const LikedCommodities = user.toJSON().LikedCommodities
+            .map(i => ({...i, inCart: cartItem.includes(i.id)}))
+            return res.render('likeCommodities', { LikedCommodities })
         })
     }
 }

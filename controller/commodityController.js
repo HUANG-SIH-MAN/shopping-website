@@ -3,6 +3,7 @@ const Commodity = db.Commodity
 const Category = db.Category
 const User = db.User
 const Like = db.Like
+const Cart = db.Cart
 const { Op } = require('sequelize')
 
 const commodityController = {
@@ -28,13 +29,15 @@ const commodityController = {
         Commodity.findByPk(req.params.id, {
             include: [ 
                 Category,
+                Cart,
                 { model: User, as: 'LikedUsers' } 
             ] 
         })
         .then(commodity => {
+            const inCart = commodity.toJSON().Carts.some(i => i.userId === req.user.id)
             const likedUser = commodity.toJSON().LikedUsers.some(i => i.id === req.user.id)
             commodity.increment({viewCount: 1})
-            return res.render('commodity', { commodity: commodity.toJSON(), likedUser })
+            return res.render('commodity', { commodity: commodity.toJSON(), likedUser, inCart})
         })
     },
     useCategoryfindCommodity: async (req, res)=>{
@@ -85,7 +88,7 @@ const commodityController = {
             CommodityId: req.params.commodiytId,
             UserId: req.user.id
         })
-        .then(() => res.redirect('back'))
+        .then(() => res.json({ "status": "success" }))
     },
     removeLike: (req, res) => {
         Like.destroy({ 
@@ -94,7 +97,7 @@ const commodityController = {
                 UserId: req.user.id
             } 
         })
-        .then(() => res.redirect('back'))
+        .then(() => res.json({ "status": "success" }))
     }
 }
 

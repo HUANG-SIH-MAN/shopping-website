@@ -25,10 +25,7 @@ const cartController = {
                 commodityId: req.params.commodityId 
             } 
         })
-        .then(()=> {
-            req.flash('success', '成功將商品加入購物車!!')
-            return res.redirect('back')
-        })
+        .then(()=> res.json({ "status": "success" }))
     },
     removeCommodity: (req, res) => {
         Cart.destroy({ 

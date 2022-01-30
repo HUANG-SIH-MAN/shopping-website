@@ -7,9 +7,9 @@
         </div>    
     </div> 
     {{>message}}
-    {{#if user.LikedCommodities}}
+    {{#if LikedCommodities}}
     <ul class="list-unstyled mb-5">
-    {{#each user.LikedCommodities}}    
+    {{#each LikedCommodities}}    
     <li class="media commodityLi m-3">
         <img src="{{this.image}}" class="mr-3" width="200" height="200">
         <div class="media-body m-3">
@@ -24,10 +24,11 @@
             <a type="button" class="btn btn-primary" href="/commodity/{{this.id}}">詳細資訊</a>
             {{#if this.removed}}
             <button type="button" class="btn btn-secondary"><i class="fas fa-shopping-cart mr-2"></i>商品已經下架，無法購買!!</button>
+            {{/if}}
+            {{#if this.inCart}}
+            <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart mr-1"></i>已加入</button>
             {{else}}
-            <form action="/cart/{{this.id}}" method="post">
-                <button type="submit" class="btn btn-success"><i class="fas fa-shopping-cart mr-2"></i>放入購物車</button>
-            </form>
+            <button type="button" class="btn btn-success addCart" data-id="{{this.id}}"><i class="fas fa-shopping-cart mr-2" data-id="{{this.id}}"></i>放入購物車</button>
             {{/if}}
         </div>
         </div>
@@ -43,3 +44,23 @@
         </div>
     {{/if}}   
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener('click', event => {
+        const target = event.target
+        const commodityID = target.dataset.id
+        if (target.matches('.addCart')) {
+		    axios.post(`/cart/${commodityID}`)
+		    .then(()=> {
+                target.classList.remove('addCart')
+                target.innerHTML = '<i class="fas fa-shopping-cart mr-1"></i>已加入'
+             })	
+        } else if (target.matches('.fa-shopping-cart')) {
+            axios.post(`/cart/${commodityID}`)
+			.then(()=> {
+                target.parentElement.classList.remove('addCart')
+                target.parentElement.innerHTML = '<i class="fas fa-shopping-cart mr-1"></i>已加入'
+            })
+        }
+    })
+</script>
