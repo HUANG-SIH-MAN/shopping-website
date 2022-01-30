@@ -37,7 +37,7 @@ const commodityController = {
             const inCart = commodity.toJSON().Carts.some(i => i.userId === req.user.id)
             const likedUser = commodity.toJSON().LikedUsers.some(i => i.id === req.user.id)
             commodity.increment({viewCount: 1})
-            return res.render('commodity', { commodity: commodity.toJSON(), likedUser, inCart})
+            return res.render('commodity', { commodity: commodity.toJSON(), likedUser, inCart, backURL: req.headers.referer})
         })
     },
     useCategoryfindCommodity: async (req, res)=>{

@@ -20,16 +20,34 @@
           <a type="button" class="btn btn-primary" onclick="history.go(-1)">返回上一頁</a>
           <a type="button" class="btn btn-success" href="/admin/commodity/{{commodity.id}}/edit">修改商品資料</a>
           {{#if commodity.removed}}
-            <form action="/admin/commodity/undoRemoved/{{commodity.id}}?_method=PUT" method="post">
-                <button type="submit" class="btn btn-warning">上架商品</button>
-            </form>
+            <button type="button" class="btn btn-warning undoRemoved" data-id="{{commodity.id}}">上架商品</button>
           {{else}}
-            <form action="/admin/commodity/removed/{{commodity.id}}?_method=PUT" method="post">
-              <button type="submit" class="btn btn-danger">下架商品</button>
-            </form>
+            <button type="button" class="btn btn-danger removed" data-id="{{commodity.id}}">下架商品</button>
           {{/if}}
       </div>
     </div>
   </div>
 </div>    
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  document.addEventListener('click', event => {
+    const target = event.target
+    const commodityID = target.dataset.id
+    if (target.matches('.undoRemoved')) {
+      axios.post(`/admin/commodity/undoRemoved/${commodityID}?_method=PUT`)
+      .then(()=> {
+        target.innerHTML = '下架商品'
+        target.classList.remove('btn-warning', 'undoRemoved')
+        target.classList.add('btn-danger', 'removed')
+      })
+    } else if (target.matches('.removed')) {
+      axios.post(`/admin/commodity/removed/${commodityID}?_method=PUT`)
+      .then(()=> {
+        target.innerHTML = '上架商品'
+        target.classList.remove('btn-danger', 'removed')
+        target.classList.add('btn-warning', 'undoRemoved')
+      })
+    }
+  })
+</script>

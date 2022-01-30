@@ -95,14 +95,14 @@ const adminController = {
             { removed: true }, 
             { where: { id: req.params.id }}
         )
-        .then(()=> res.redirect('back'))
+        .then(()=> res.json({ "status": "success" }))
     },
     undoRemovedCommodity: (req, res) => {
         Commodity.update(
             { removed: false }, 
             { where: { id: req.params.id }}
         )
-        .then(()=> res.redirect('back'))
+        .then(()=> res.json({ "status": "success" }))
     },
     deleteCommodity: (req, res) => {
         Commodity.destroy({ 
