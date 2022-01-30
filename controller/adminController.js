@@ -156,6 +156,10 @@ const adminController = {
             where: { id: req.params.id }
         })
         .then(()=> res.redirect('back'))
+        .catch(()=> {
+            req.flash('error', '分類中有商品已被消費者購買，包含太多相關資料，無法刪除!!')
+            return res.redirect('back')
+        })
     },
     usersPage: (req, res) => {
         User.findAll({

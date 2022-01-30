@@ -93,3 +93,9 @@ body {
 	background-color: rgb(255, 255, 255);
 	border-radius: 20px;
 }
+
+/*購物車加減號*/
+.symbol {
+	font-size: 1.5em;
+	font-weight: bolder;
+}

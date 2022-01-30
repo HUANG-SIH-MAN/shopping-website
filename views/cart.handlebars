@@ -6,7 +6,7 @@
         <a type="button" class="btn btn-success" href="/users/likeCommodities">最愛商品</a>
         </div>    
     </div>
-    {{>message}}
+    <div class="message"></div>
     {{#if cartError}}
         <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
         {{ cartError }}
@@ -27,27 +27,21 @@
         <th scope="col">刪除商品</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class='tbody'>
         {{#each cart}}
         <tr>
         <th scope="row"><a href="/commodity/{{this.Commodity.id}}" target="_blank"><img src="{{this.Commodity.image}}" width="80" height="80"></a></th>
         <td>{{this.Commodity.name}}</td>
-        <td>{{this.Commodity.price}}</td>
+        <td id="price{{this.Commodity.id}}">{{this.Commodity.price}}</td>
         <td>
             <div class="d-flex justify-content-start align-items-center">
-            <form action="/cart/addQuantity/{{this.id}}?_method=PUT" method="post">
-                <button type="submit" class="btn btn-outline-success btn-sm"><i class="fas fa-plus"></i></button>
-            </form>
-            <span class="m-3">{{this.quantity}}</span>
-            <form action="/cart/reduceQuantity/{{this.id}}?_method=PUT" method="post">
-                <button type="submit" class="btn btn-outline-danger btn-sm"><i class="fas fa-minus"></i></button>
-            </form>
+                <button type="button" class="btn btn-outline-success btn-sm addQuantity symbol" data-orderid="{{this.id}}" data-id="{{this.Commodity.id}}" data-remain="{{this.Commodity.remainingNumber}}">+</button>
+                <span class="m-3" id="quantity{{this.Commodity.id}}">{{this.quantity}}</span>
+                <button type="button" class="btn btn-outline-danger btn-sm reduceQuantity symbol" data-orderid="{{this.id}}" data-id="{{this.Commodity.id}}">–</button>
             </div>
         </td>
         <td>
-            <form action="/cart/{{this.id}}?_method=DELETE" method="post">
-                <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt mr-2"></i>刪除</button>
-            </form>
+            <button type="button" class="btn btn-danger removeCommodity" data-orderid="{{this.id}}" data-id="{{this.Commodity.id}}"><i class="fas fa-trash-alt mr-2"  data-orderid="{{this.id}}" data-id="{{this.Commodity.id}}"></i>刪除</button>
         </td>
         </tr>
         {{/each}}
@@ -55,10 +49,85 @@
     </table>
     <hr>
     <div class="d-flex justify-content-start m-3">
-        <h4>總金額: {{totalAmount}}</h4>
-        <a type="button" href="/order/information" class="btn btn-success ml-3"><i class="fas fa-shopping-cart mr-2"></i>開始結帳</a>      
+        <h4>總金額:<span id="totalAmount">{{totalAmount}}</span></h4>
+        <a type="button" href="/order/information" class="btn btn-success ml-3 pay"><i class="fas fa-shopping-cart mr-2"></i>開始結帳</a>      
     </div>
     </div>
     {{/if}}
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    document.addEventListener('click', event => {
+        const totalAmount = document.querySelector('#totalAmount')
+        const target = event.target
+        const orderId = target.dataset.orderid
+        const commodityId = target.dataset.id
+        const commodityPrice = document.querySelector(`#price${commodityId}`)
+        const commodityQuantity = document.querySelector(`#quantity${commodityId}`)
+        const tbody = document.querySelector('.tbody')
+        const pay = document.querySelector('.pay')
+        const message = document.querySelector('.message')
+        if (target.matches('.removeCommodity')) {
+		    axios.post(`/cart/${orderId}?_method=DELETE`)
+			.then(()=> {
+                const newTotalAmount = Number(totalAmount.innerHTML)- Number(commodityPrice.innerHTML) * Number(commodityQuantity.innerHTML)
+                totalAmount.innerHTML = `${newTotalAmount}`
+                target.parentElement.parentElement.remove()
+                if (!newTotalAmount) {
+                    tbody.innerHTML = `<h4 class="m-4">目前購物車沒有任何商品</h4>`
+                    pay.remove()
+                }
+            })	
+        } else if (target.matches('.fa-trash-alt')) {
+            axios.post(`/cart/${orderId}?_method=DELETE`)
+			.then(()=> {
+                const newTotalAmount = Number(totalAmount.innerHTML)- Number(commodityPrice.innerHTML) * Number(commodityQuantity.innerHTML)
+                totalAmount.innerHTML = `${newTotalAmount}`
+                target.parentElement.parentElement.parentElement.remove()
+                if (!newTotalAmount) {
+                    tbody.innerHTML = `<h4 class="m-4">目前購物車沒有任何商品</h4>`
+                    pay.remove()
+                }
+            })
+        } else if (target.matches('.reduceQuantity')) {
+            if (commodityQuantity.innerHTML === '1') {
+                message.innerHTML =`
+                <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+                    商品數量不可為0!!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                `
+            } else {
+                axios.post(`/cart/reduceQuantity/${orderId}?_method=PUT`)
+                .then(() => {
+                    commodityQuantity.innerHTML = Number(commodityQuantity.innerHTML) - 1
+                    const newTotalAmount = Number(totalAmount.innerHTML) - Number(commodityPrice.innerHTML) 
+                    totalAmount.innerHTML = `${newTotalAmount}`
+                })
+            }
+        } else if (target.matches('.addQuantity')) {
+            const remain = target.dataset.remain
+            if (remain === commodityQuantity.innerHTML) {
+                message.innerHTML =`
+                <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+                    訂購商品數量無法超過庫存量!!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                `
+            } else {
+                axios.post(`/cart/addQuantity/${orderId}?_method=PUT`)
+                .then(() => {
+                    commodityQuantity.innerHTML = Number(commodityQuantity.innerHTML) + 1
+                    const newTotalAmount = Number(totalAmount.innerHTML) + Number(commodityPrice.innerHTML) 
+                    totalAmount.innerHTML = `${newTotalAmount}`
+                }) 
+            }
+        }
+    })
+</script>
 
+ 

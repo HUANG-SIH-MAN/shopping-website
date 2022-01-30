@@ -31,10 +31,7 @@ const cartController = {
         Cart.destroy({ 
             where: { id: req.params.id } 
         })
-        .then(() => {
-            req.flash('success', '成功將商品移除!!')
-            return res.redirect('back')
-        })
+        .then(() => res.json({ "status": "success" }))
     },
     addQuantity: (req, res) => {
         Cart.findByPk(req.params.id,{
@@ -43,22 +40,20 @@ const cartController = {
         .then(cart => {
             const data = cart.toJSON()
             if (data.quantity >= data.Commodity.remainingNumber) {
-                req.flash('error', '訂購商品數量無法超過庫存量')
-            } else {
-                cart.increment({quantity: 1})
-            }      
-            return res.redirect('back')
+                return res.json({ "status": "error", "message": "訂購商品數量無法超過庫存量" })
+            }
+            cart.increment({quantity: 1})
+            return res.json({ "status": "success" })
         })
     },
     reduceQuantity: (req, res) => {
         Cart.findByPk(req.params.id)
         .then(cart => {
             if (cart.dataValues.quantity <= 1) {
-                req.flash('error', '商品數量至少為1')
-            } else {
-                cart.decrement({quantity: 1}) 
+                return res.json({ "status": "error", "message": "商品數量至少為1" }) 
             }
-            return res.redirect('back')
+            cart.decrement({quantity: 1}) 
+            return res.json({ "status": "success" })
         })
     }
 }
