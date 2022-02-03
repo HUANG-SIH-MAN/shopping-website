@@ -50,6 +50,7 @@ const newebpay = {
             MerchantOrderNo,
             Amt: amount,
             ItemDesc: '生活日用雜貨',
+            OrderComment: '這是金流測試API連線，信用卡卡號請輸入4000-2211-1111-1111，有效月年及卡片背面末三碼，請任意填寫',
             Email: email,
             LoginType: 0,
             CREDIT: 1,

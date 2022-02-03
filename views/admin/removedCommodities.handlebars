@@ -7,6 +7,7 @@
         </div>    
     </div>
     {{>message}}
+    <div class="errorMessage"></div>
     <ul class="list-unstyled mb-5">
     {{#each commodity}}    
     <li class="media commodityLi m-3">
@@ -22,9 +23,7 @@
         </p>
         <div class="btn-group" role="group" aria-label="Basic example">
             <a type="button" class="btn btn-primary" href="/admin/commodity/{{this.id}}">詳細資訊</a>
-            <form action="/admin/commodity/undoRemoved/{{this.id}}?_method=PUT" method="post">
-                <button type="submit" class="btn btn-success">上架商品</button>
-            </form>
+            <button type="button" class="btn btn-success undoRemoved" data-id="{{this.id}}">上架商品</button>
             <button type="submit" class="btn btn-danger delete-confirm" data-toggle="modal" data-target="#exampleModal" data-id="{{this.id}}">刪除商品</button>
         </div>
         </div>
@@ -51,10 +50,12 @@
     </div>
   </div>
 </div>
-
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
   document.addEventListener('click', event => {
     const target = event.target
+    const commodityID = target.dataset.id
+    const errorMessage = document.querySelector('.errorMessage')
     if (target.matches('.delete-confirm')) {
       const commodityID = target.dataset.id
       const deleteCommodity = document.querySelector('.delete-commodity')
@@ -64,6 +65,22 @@
           <button type="submit" class="btn btn-outline-danger">刪除</a>
         </form>
       `
+    } else if (target.matches('.undoRemoved')) {
+      axios.post(`/admin/commodity/undoRemoved/${commodityID}?_method=PUT`)
+      .then((result)=> {
+          if (result.data.status === 'error') {
+            errorMessage.innerHTML = `
+              <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+              ${result.data.message}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              </div>
+            `
+          } else {
+            target.parentElement.parentElement.parentElement.remove()
+          } 
+      })
     }
   })
 </script>

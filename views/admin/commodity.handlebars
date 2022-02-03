@@ -5,6 +5,7 @@
       <img src="{{commodity.image}}" width="250" height="250">
     </div>
     <div class="col-md-8">
+      <div class="errorMessage"></div>
       <div class="card-body">
         <h5 class="card-title">{{commodity.name}}</h5>
         <p class="card-text">商品類別：{{commodity.Category.name}}</p>
@@ -34,12 +35,24 @@
   document.addEventListener('click', event => {
     const target = event.target
     const commodityID = target.dataset.id
+    const errorMessage = document.querySelector('.errorMessage')
     if (target.matches('.undoRemoved')) {
       axios.post(`/admin/commodity/undoRemoved/${commodityID}?_method=PUT`)
-      .then(()=> {
-        target.innerHTML = '下架商品'
-        target.classList.remove('btn-warning', 'undoRemoved')
-        target.classList.add('btn-danger', 'removed')
+      .then((result)=> {
+        if (result.data.status === 'error') {
+          errorMessage.innerHTML = `
+            <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+            ${result.data.message}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+          `
+        } else {
+          target.innerHTML = '下架商品'
+          target.classList.remove('btn-warning', 'undoRemoved')
+          target.classList.add('btn-danger', 'removed')
+        }
       })
     } else if (target.matches('.removed')) {
       axios.post(`/admin/commodity/removed/${commodityID}?_method=PUT`)

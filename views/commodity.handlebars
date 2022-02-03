@@ -25,12 +25,14 @@
           {{/if}}
           {{#if commodity.removed}}
             <button type="button" class="btn btn-secondary"><i class="fas fa-shopping-cart mr-2"></i>商品已經下架，無法購買!!</button>
-          {{/if}}
-          {{#if inCart}}
-            <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart mr-1"></i>已加入</button>
           {{else}}
-            <button type="button" class="btn btn-success addCart" data-id="{{commodity.id}}"><i class="fas fa-shopping-cart mr-2" data-id="{{commodity.id}}"></i>放入購物車</button>
+            {{#if inCart}}
+              <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart mr-1"></i>已加入</button>
+            {{else}}
+              <button type="button" class="btn btn-success addCart" data-id="{{commodity.id}}"><i class="fas fa-shopping-cart mr-2" data-id="{{commodity.id}}"></i>放入購物車</button>
+            {{/if}}
           {{/if}}
+
       </div>
     </div>
   </div>

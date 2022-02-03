@@ -64,6 +64,9 @@ const orderController = {
                     .then(commodity => {
                         commodity.increment({ saleAmount: i.quantity })
                         commodity.decrement({ remainingNumber: i.quantity })
+                        if (commodity.dataValues.remainingNumber === i.quantity) {
+                            commodity.update({ removed: true})
+                        }
                     })
                 }
             })

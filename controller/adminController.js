@@ -2,6 +2,7 @@ const db = require('../models')
 const Commodity = db.Commodity
 const Category = db.Category
 const User = db.User
+const { Op } = require('sequelize')
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
@@ -98,11 +99,17 @@ const adminController = {
         .then(()=> res.json({ "status": "success" }))
     },
     undoRemovedCommodity: (req, res) => {
-        Commodity.update(
-            { removed: false }, 
-            { where: { id: req.params.id }}
-        )
-        .then(()=> res.json({ "status": "success" }))
+        Commodity.findByPk(req.params.id)
+        .then(commodity => {
+            if (commodity.dataValues.remainingNumber <= 0) {
+                return  res.json({ "status": "error", "message": "庫存量必須大於零，才能將商品上架" })
+            }
+            commodity.update(
+                { removed: false }, 
+                { where: { id: req.params.id, remainingNumber: { [Op.gt]: 0 } }}
+            )
+            .then(()=> res.json({ "status": "success" }))
+        })
     },
     deleteCommodity: (req, res) => {
         Commodity.destroy({ 

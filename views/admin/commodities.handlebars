@@ -22,12 +22,23 @@
         <div class="btn-group" role="group" aria-label="Basic example">
             <a type="button" class="btn btn-primary" href="/admin/commodity/{{this.id}}">詳細資訊</a>
             <a type="button" class="btn btn-success" href="/admin/commodity/{{this.id}}/edit">修改商品資料</a>
-            <form action="/admin/commodity/removed/{{this.id}}?_method=PUT" method="post">
-                <button type="submit" class="btn btn-danger">下架商品</button>
-            </form>
+            <button type="button" class="btn btn-danger removed" data-id="{{this.id}}">下架商品</button>
         </div>
         </div>
     </li>
     {{/each}}
     </ul>     
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  document.addEventListener('click', event => {
+    const target = event.target
+    const commodityID = target.dataset.id
+    if (target.matches('.removed')) {
+      axios.post(`/admin/commodity/removed/${commodityID}?_method=PUT`)
+      .then(()=> {
+          target.parentElement.parentElement.parentElement.remove()
+      })
+    }
+  })
+</script>

@@ -109,7 +109,7 @@
             }
         } else if (target.matches('.addQuantity')) {
             const remain = target.dataset.remain
-            if (remain === commodityQuantity.innerHTML) {
+            if (Number(remain) <= Number(commodityQuantity.innerHTML)) {
                 message.innerHTML =`
                 <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
                     訂購商品數量無法超過庫存量!!

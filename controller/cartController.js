@@ -1,7 +1,6 @@
 const db = require('../models')
 const Cart = db.Cart
 const Commodity = db.Commodity
-const newebpay = require('../utils/newebpay')
 
 const cartController = {
     cartListPage: (req, res) => {
