@@ -4,11 +4,17 @@ const home = require('./modules/home')
 const auth = require('./modules/auth')
 const user = require('./modules/user')
 const commodity = require('./modules/commodity')
+const commodityAPI = require('./modules/api/commodity')
 const admin = require('./modules/admin')
 const cart = require('./modules/cart')
 const order = require('./modules/order')
 const { authenticator, authenticatedAdmin } = require('../middleware/auth')
+const { apiErrorHandler } = require('../middleware/error-handle')
 
+// API路由
+router.use('/api/commodities', apiErrorHandler, commodityAPI)
+
+// 一般畫面路由
 router.use('/auth', auth)
 router.use('/users', user)
 router.use('/admin', authenticatedAdmin, admin)

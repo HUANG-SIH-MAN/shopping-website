@@ -38,6 +38,10 @@ app.use((req, res, next) => {
     next()
 })
 
+//cors設定
+const cors = require('cors')
+app.use(cors())
+
 //路由設定
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
