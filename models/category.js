@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Category.hasMany(models.Commodity, { onDelete: 'cascade', hooks: true })
     }
-  };
+  }
   Category.init({
     name: DataTypes.STRING
   }, {

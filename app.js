@@ -17,7 +17,7 @@ app.use(express.static('public'))
 //session 儲存使用者認證狀態
 const session = require('express-session')
 app.use(session({ 
-    secret: process.env.sessionSecret , 
+    secret: process.env.sessionSecret,
     name: 'user', 
     resave: false, 
     saveUninitialized: true 

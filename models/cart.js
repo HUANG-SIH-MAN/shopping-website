@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Cart.belongsTo(models.User)
       Cart.belongsTo(models.Commodity)
     }
-  };
+  }
   Cart.init({
     quantity: DataTypes.INTEGER,
     commodityId: DataTypes.INTEGER,

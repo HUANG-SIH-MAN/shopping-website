@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       OrderItem.belongsTo(models.Order)
       OrderItem.belongsTo(models.Commodity)
     }
-  };
+  }
   OrderItem.init({
     quantity: DataTypes.INTEGER,
     price: DataTypes.INTEGER,

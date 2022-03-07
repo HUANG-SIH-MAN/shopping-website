@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       Order.belongsTo(models.User)
       Order.hasMany(models.OrderItem)
     }
-  };
+  }
   Order.init({
     status: DataTypes.BOOLEAN,
     email: DataTypes.STRING,

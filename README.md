@@ -20,7 +20,7 @@
 
 - 使用框架 express
 - 使用樣板引擎 express-handlebars
-- 使用資料庫 MySOL
+- 使用資料庫 MySQL
 - 安裝
   - 下載專案
     ```

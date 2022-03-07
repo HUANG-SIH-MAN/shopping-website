@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Cart)
       User.hasMany(models.Order)
     }
-  };
+  }
   User.init({
     name: DataTypes.STRING,
     email: DataTypes.STRING,

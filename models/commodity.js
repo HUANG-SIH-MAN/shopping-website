@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       Commodity.hasMany(models.Cart, { onDelete: 'cascade', hooks: true })
       Commodity.hasMany(models.OrderItem)
     }
-  };
+  }
   Commodity.init({
     name: DataTypes.STRING,
     price: DataTypes.INTEGER,
