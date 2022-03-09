@@ -2,20 +2,40 @@ const commodityService = require('../../services/commodityService')
 
 const commodityController = {
   getCommodities: (req, res, next) => {
-    commodityService.getCommodities(false, (err, data) => err 
-    ? next(err) 
-    : res.status(200).json({
+    commodityService.getCommodities(false)
+    .then(data => 
+      res.status(200).json({
       status: 'success',
       result: data
     }))
+    .catch(err => next(err))
   },
   getCommodity: (req, res, next) => {
-    commodityService.getCommodity(req.params.id, (err, data) => err 
-    ? next(err) 
-    : res.status(200).json({
+    commodityService.getCommodity(req.params.id)
+    .then(data => 
+      res.status(200).json({
       status: 'success',
       result: data
     }))
+    .catch(err => next(err))
+  },
+  useCategoryfindCommodity: (req, res, next) => {
+    commodityService.useCategoryfindCommodity(req.params.id, false)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      result: data
+    }))
+    .catch(err => next(err))
+  },
+  searchCommodity: (req, res, next) => {
+    commodityService.searchCommodity(req.query.name)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      result: data
+    }))
+    .catch(err => next(err))
   }
 }
 

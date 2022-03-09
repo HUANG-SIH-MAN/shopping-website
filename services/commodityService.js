@@ -1,10 +1,11 @@
 const { Commodity, Category } = require('../models')
 const sequelize = require('sequelize')
+const { Op } = sequelize
 
 const commodityService = {
-  getCommodities: async (removed, cb) => {
-    try {
-      const commoditiesData = await Commodity.findAll({
+  getCommodities: (removed) => {
+    return new Promise((resolve, reject) => {
+      Commodity.findAll({
         raw: true,
         nest: true,
         group: 'id',
@@ -15,26 +16,66 @@ const commodityService = {
         },
         order: [['viewCount', "DESC"]],
       })
-      return cb(null, commoditiesData)
-    } catch (err) {
-      return cb(err, null)
-    }
+      .then(commodity => resolve(commodity))
+      .catch(err => reject(err))
+    })
   },
-  getCommodity: async (id, cb) => {
-    try {
-      const commodityData = await Commodity.findByPk(id, {
+  getCommodity: (id) => {
+    return new Promise((resolve, reject) => {
+      Commodity.findByPk(id, {
         raw: true,
         attributes: { 
           include: [[sequelize.literal('(SELECT name FROM Categories WHERE id = categoryId)'), 'CategoryName']],
           exclude: ['createdAt', 'updatedAt'] 
         },
       })
-      return cb(null, commodityData)
-    } catch (err) {
-      return cb(err, null)
-    }
+      .then(commodity => {
+        if (!commodity) throw new Error('輸入錯誤商品id，查詢不到相關資料')
+        return resolve(commodity)
+      })
+      .catch(err => reject(err))
+    })
+  },
+  useCategoryfindCommodity: (categoryId, removed) => {
+    return new Promise((resolve, reject) => {
+      Commodity.findAll({
+        raw: true,
+        nest: true,
+        group: 'id',
+        where: { categoryId, removed },
+        attributes: { 
+          include: [[sequelize.literal('(SELECT name FROM Categories WHERE id = categoryId)'), 'CategoryName']],
+          exclude: ['createdAt', 'updatedAt'] 
+        },
+        order: [['viewCount', "DESC"]],
+      })
+      .then(commodity => {
+        if (commodity.length === 0) throw new Error('輸入錯誤商品分類id，查詢不到相關資料')
+        return resolve(commodity)
+      })
+      .catch(err => reject(err))
+    })
+  },
+  searchCommodity: (keyword) => {
+    return new Promise((resolve, reject) => {
+      Commodity.findAll({
+        raw: true,
+        nest: true,
+        group: 'id',
+        where: { removed: false, name:{ [Op.like]: `%${keyword}%` } },
+        attributes: { 
+          include: [[sequelize.literal('(SELECT name FROM Categories WHERE id = categoryId)'), 'CategoryName']],
+          exclude: ['createdAt', 'updatedAt'] 
+        },
+        order: [['viewCount', "DESC"]],
+      })
+      .then(commodity => {
+        if (commodity.length === 0) throw new Error(`使用${keyword}當關鍵字，查詢不到相關資料`)
+        return resolve(commodity)
+      })
+      .catch(err => reject(err))
+    })
   }
 }
-
 
 module.exports = commodityService

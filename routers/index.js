@@ -9,10 +9,9 @@ const admin = require('./modules/admin')
 const cart = require('./modules/cart')
 const order = require('./modules/order')
 const { authenticator, authenticatedAdmin } = require('../middleware/auth')
-const { apiErrorHandler } = require('../middleware/error-handle')
 
 // API路由
-router.use('/api/commodities', apiErrorHandler, commodityAPI)
+router.use('/api/commodities', commodityAPI)
 
 // 一般畫面路由
 router.use('/auth', auth)
