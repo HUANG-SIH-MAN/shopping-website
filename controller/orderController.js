@@ -53,7 +53,7 @@ const orderController = {
     mpgatewayCallback: async (req, res) => {
         if (req.body.Status === 'SUCCESS') {
             const TradeInfo = JSON.parse(newebpay.decryptTradeInfoAES(req.body.TradeInfo))
-            const orderId = Number(TradeInfo['Result']['MerchantOrderNo'])
+            const orderId = Number(TradeInfo['Result']['MerchantOrderNo'].slice(10))
             await Cart.destroy({where: {userId: req.user.id}})
             await Order.findByPk(orderId, {include: [ OrderItem ]})
             .then(async (order) => {
