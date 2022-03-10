@@ -36,6 +36,15 @@ const commodityController = {
       result: data
     }))
     .catch(err => next(err))
+  },
+  getCategories: (req, res, next) => {
+    commodityService.getCategories()
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      result: data
+    }))
+    .catch(err => next(err))
   }
 }
 

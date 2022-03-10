@@ -31,6 +31,7 @@ usePassport(app)
 const flash = require('connect-flash')
 app.use(flash())
 app.use((req, res, next) => {
+    res.cookie({ sameSite: 'none', secure: true })
     res.locals.isAuthenticated = req.isAuthenticated()
     res.locals.user = req.user
     res.locals.error_msg = req.flash('error')

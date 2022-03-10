@@ -75,6 +75,16 @@ const commodityService = {
       })
       .catch(err => reject(err))
     })
+  },
+  getCategories: () => {
+    return new Promise((resolve, reject) => {
+      Category.findAll({ 
+        raw: true, nest: true,
+        attributes: ['id', 'name']
+      })
+      .then(category => resolve(category))
+      .catch(err => reject(err))
+    })
   }
 }
 
