@@ -5,10 +5,9 @@ const FacebookStrategy = require('passport-facebook')
 const GoogleStrategy = require('passport-google-oauth20').Strategy 
 const TwitterStrategy = require('passport-twitter').Strategy
 const passportJWT = require('passport-jwt')
-const { User, Commodity, Cart, Order } = require('../models')
-
 const JWTStrategy = passportJWT.Strategy
 const ExtractJWT = passportJWT.ExtractJwt
+const { User, Commodity, Cart, Order } = require('../models')
 
 module.exports = app => { 
   //初始化 

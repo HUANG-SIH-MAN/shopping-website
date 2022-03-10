@@ -3,12 +3,12 @@ const router = express.Router()
 const home = require('./modules/home')
 const auth = require('./modules/auth')
 const user = require('./modules/user')
-const userAPI = require('./modules/api/user')
 const commodity = require('./modules/commodity')
-const commodityAPI = require('./modules/api/commodity')
 const admin = require('./modules/admin')
 const cart = require('./modules/cart')
 const order = require('./modules/order')
+const userAPI = require('./modules/api/user')
+const commodityAPI = require('./modules/api/commodity')
 const { authenticator, authenticatedAdmin } = require('../middleware/auth')
 
 // API路由
@@ -23,4 +23,5 @@ router.use('/commodity', authenticator, commodity)
 router.use('/cart', authenticator, cart)
 router.use('/order', authenticator, order)
 router.use('/', authenticator, home)
+
 module.exports = router
