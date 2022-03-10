@@ -3,6 +3,7 @@ const router = express.Router()
 const home = require('./modules/home')
 const auth = require('./modules/auth')
 const user = require('./modules/user')
+const userAPI = require('./modules/api/user')
 const commodity = require('./modules/commodity')
 const commodityAPI = require('./modules/api/commodity')
 const admin = require('./modules/admin')
@@ -12,6 +13,7 @@ const { authenticator, authenticatedAdmin } = require('../middleware/auth')
 
 // API路由
 router.use('/api/commodities', commodityAPI)
+router.use('/api/users', userAPI)
 
 // 一般畫面路由
 router.use('/auth', auth)
