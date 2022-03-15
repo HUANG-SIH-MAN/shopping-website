@@ -19,10 +19,10 @@ module.exports = app => {
   ,(req, email, password, done) => { 
     User.findOne({where: { email: email }})
       .then(user => { 
-        if (!user) return done(null, false, { message: '此電子郵件並未被註冊!!' }) 
+        if (!user) return done(Error('此電子郵件並未被註冊!!'), false, { message: '此電子郵件並未被註冊!!' }) 
         return bcrypt.compare(password, user.password) 
           .then(isMath => { 
-            if (!isMath) return done(null, false, { message: '密碼輸入錯誤，請重新輸入!!' }) 
+            if (!isMath) return done(Error('密碼輸入錯誤，請重新輸入!!'), false, { message: '密碼輸入錯誤，請重新輸入!!' }) 
             return done(null, user) 
           }) 
         }) 

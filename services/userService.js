@@ -1,9 +1,22 @@
 const { User } = require('../models')
+const bcrypt = require('bcryptjs')
 
 const userService = {
-  login: (req) => {
+  register: (name, email, password) => {
     return new Promise((resolve, reject) => {
-      const { email, password } = req.body
+      User.findOrCreate({
+        where: { email },
+        defaults: { 
+          name,
+          password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null),
+          isAdmin: false
+        }
+      })
+      .then(user => {
+        if (!user[1]) throw new Error('該信箱已經被註冊過了!!')
+        return resolve('註冊成功')
+      })
+      .catch(err => reject(err))
     })
   }
 }
