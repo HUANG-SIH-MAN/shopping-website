@@ -20,7 +20,7 @@ app.use(session({
     secret: process.env.sessionSecret,
     name: 'user', 
     resave: false, 
-    saveUninitialized: true 
+    saveUninitialized: true
 }))
 
 //passport 登入設定
@@ -31,7 +31,8 @@ usePassport(app)
 const flash = require('connect-flash')
 app.use(flash())
 app.use((req, res, next) => {
-    res.cookie({ sameSite: 'none', secure: true })
+    const start = req.headers.cookie.indexOf('user')
+    res.cookie('user', req.headers.cookie.slice(start + 5) ,{ httpOnly: true, sameSite: 'none', secure: true })
     res.locals.isAuthenticated = req.isAuthenticated()
     res.locals.user = req.user
     res.locals.error_msg = req.flash('error')
