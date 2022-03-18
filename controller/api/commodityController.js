@@ -45,6 +45,24 @@ const commodityController = {
       result: data
     }))
     .catch(err => next(err))
+  },
+  likeCommodity: (req, res, next) => {
+    commodityService.likeCommodity(req.user.id, req.params.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
+    }))
+    .catch(err => next(err))
+  },
+  unlikeCommodity: (req, res, next) => {
+    commodityService.unlikeCommodity(req.user.id, req.params.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
+    }))
+    .catch(err => next(err))
   }
 }
 

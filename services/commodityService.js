@@ -1,4 +1,4 @@
-const { Commodity, Category } = require('../models')
+const { Commodity, Category, Like } = require('../models')
 const sequelize = require('sequelize')
 const { Op } = sequelize
 
@@ -83,6 +83,29 @@ const commodityService = {
         attributes: ['id', 'name']
       })
       .then(category => resolve(category))
+      .catch(err => reject(err))
+    })
+  },
+  likeCommodity: (UserId, CommodityId) => {
+    return new Promise((resolve, reject) => {
+      Like.findOrCreate({
+        where: { UserId, CommodityId }
+      })
+      .then(like => {
+        if (!like[1]) throw new Error('該商品已經被使用者加入最愛')
+        resolve('成功將商品加入最愛')
+      })
+      .catch(err => reject(err))
+    })
+  },
+  unlikeCommodity: (UserId, CommodityId) => {
+    return new Promise((resolve, reject) => {
+      Like.destroy({
+        where: { UserId, CommodityId }
+      })
+      .then(() => {
+        resolve('成功將移除最愛商品')
+      })
       .catch(err => reject(err))
     })
   }

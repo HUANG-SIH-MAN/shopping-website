@@ -46,14 +46,24 @@ const userService = {
           include: [
             [sequelize.literal('(SELECT name FROM Commodities WHERE id = commodityId)'), 'CommodityName'],
             [sequelize.literal('(SELECT price FROM Commodities WHERE id = commodityId)'), 'CommodityPrice'],
-            [sequelize.literal('(SELECT image FROM Commodities WHERE id = commodityId)'), 'CommodityImage']
+            [sequelize.literal('(SELECT image FROM Commodities WHERE id = commodityId)'), 'CommodityImage'],
+            [sequelize.literal('(SELECT removed FROM Commodities WHERE id = commodityId)'), 'removed']
           ],
           exclude: ['id', 'userId', 'commodityId', 'createdAt', 'updatedAt']
         }
       })
       .then(commodity => {
-        if (commodity.length === 0) throw new Error('使用者的購物車內沒有任何商品')
-        return resolve(commodity)
+        const data = []
+        for (let item of commodity) {
+          if(item.removed) {
+            Cart.destroy({ where: {commodityId: item.CommodityId} })
+          } else {
+            delete item.removed
+            data.push(item)
+          }
+        }
+        if (data.length === 0) throw new Error('使用者的購物車內沒有任何商品')
+        return resolve(data)
       })
       .catch(err => reject(err))
     })
