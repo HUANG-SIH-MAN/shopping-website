@@ -1,6 +1,6 @@
 const passport = require('passport')
 
-const authenticated = (req, res, next) => {
+const authenticatedAPI = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err || !user) return res.status(200).json({ status: 'error', statusCode: '401', message: '沒有提供正確的authencation token' })
     req.user = user
@@ -8,7 +8,7 @@ const authenticated = (req, res, next) => {
   })(req, res, next)
 }
 
-const authenticatedAdmin = (req, res, next) => {
+const authenticatedAdminAPI = (req, res, next) => {
   passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err || !user) return res.status(200).json({ status: 'error', statusCode: '401', message: '沒有提供正確的authencation token' })
     req.user = user
@@ -18,6 +18,6 @@ const authenticatedAdmin = (req, res, next) => {
 }
 
 module.exports = {
-  authenticated,
-  authenticatedAdmin
+  authenticatedAPI,
+  authenticatedAdminAPI
 }

@@ -3,12 +3,12 @@ const passport = require('passport')
 const router = express.Router()
 const userController = require('../../../controller/api/userController')
 const { apiErrorHandler } = require('../../../middleware/error-handle')
-const { authenticated } = require('../../../middleware/api-auth')
+const { authenticatedAPI } = require('../../../middleware/api-auth')
 
 router.post('/login', passport.authenticate('local', { session: false }), userController.login)
 router.post('/register', userController.register)
-router.get('/likeCommodities', authenticated, userController.likeCommodities)
-router.get('/cartCommodities', authenticated, userController.cartCommodities)
+router.get('/likeCommodities', authenticatedAPI, userController.likeCommodities)
+router.get('/cartCommodities', authenticatedAPI, userController.cartCommodities)
 router.use('/', apiErrorHandler)
 
 module.exports = router
