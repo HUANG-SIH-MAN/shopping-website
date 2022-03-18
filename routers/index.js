@@ -9,9 +9,12 @@ const cart = require('./modules/cart')
 const order = require('./modules/order')
 const userAPI = require('./modules/api/user')
 const commodityAPI = require('./modules/api/commodity')
+const cartAPI = require('./modules/api/cart')
 const { authenticator, authenticatedAdmin } = require('../middleware/auth')
+const { authenticated } = require('../middleware/api-auth')
 
 // API路由
+router.use('/api/carts', authenticated, cartAPI)
 router.use('/api/commodities', commodityAPI)
 router.use('/api/users', userAPI)
 
