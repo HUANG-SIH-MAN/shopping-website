@@ -1,4 +1,5 @@
-const { User } = require('../models')
+const { User, Commodity, Like } = require('../models')
+const sequelize = require('sequelize')
 const bcrypt = require('bcryptjs')
 
 const userService = {
@@ -18,7 +19,41 @@ const userService = {
       })
       .catch(err => reject(err))
     })
+  },
+  likeCommodities: (userId) => {
+    return new Promise((resolve, reject) => {
+      Like.findAll({
+        raw: true, nest: true,
+        where: { userId },
+        include: [{ model: Commodity, attributes: { 
+          include: [[sequelize.literal('(SELECT name FROM Categories WHERE id = categoryId)'), 'CategoryName']],
+          exclude: ['createdAt', 'updatedAt'] 
+        }}]  
+      })
+      .then(commodity => {
+        if (commodity.length === 0) throw new Error('使用者沒有喜歡的商品')
+        return resolve(commodity.map(i => ({...i.Commodity})))
+      })
+      .catch(err => reject(err))
+    })
   }
 }
 
 module.exports = userService
+
+
+// likeCommodities: (userId) => {
+//   return new Promise((resolve, reject) => {
+//     Like.findAll({
+//       raw: true, nest: true,
+//       where: { userId },
+//       attributes: { exclude: ['CommodityId', 'createdAt', 'updatedAt'] },
+//       include: [ Commodity ]  
+//     })
+//     .then(commodity => {
+//       if (commodity.length === 0) throw new Error('使用者沒有喜歡的商品')
+//       return resolve(commodity)
+//     })
+//     .catch(err => reject(err))
+//   })
+// }

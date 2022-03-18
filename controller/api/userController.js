@@ -30,6 +30,15 @@ const userController = {
       message
     }))
     .catch(err => next(err))
+  },
+  likeCommodities: (req, res, next) => {
+    userService.likeCommodities(req.user.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      result: data
+    }))
+    .catch(err => next(err))
   }
 }
 
