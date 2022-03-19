@@ -12,10 +12,13 @@ const upload = multer({ dest: 'temp/' })
 router.get('/register', userController.registerPage)
 router.post('/register', userController.register)
 router.get('/login', userController.loginPage)
-router.post('/login',passport.authenticate('local', {
+router.post('/login', passport.authenticate('local', {
     failureRedirect: '/users/login',
     failureFlash: true
-}) ,userController.login)
+}), userController.login)
+
+router.post('/login/orderBack', passport.authenticate('local'))
+
 router.get('/logout', userController.logout)
 
 //會員帳號管理

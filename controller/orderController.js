@@ -52,25 +52,10 @@ const orderController = {
   },
   mpgatewayCallback: async (req, res) => {
     if (req.body.Status === 'SUCCESS') {
+      // 解密交易資訊
       const TradeInfo = JSON.parse(newebpay.decryptTradeInfoAES(req.body.TradeInfo))
       const orderId = Number(TradeInfo['Result']['MerchantOrderNo'].slice(10))
-      await Cart.destroy({where: {userId: req.user.id}})
-      await Order.findByPk(orderId, {include: [ OrderItem ]})
-      .then(async (order) => {
-        order.update({ status: true })
-        const orderItems = order.toJSON().OrderItems
-        for ( let i of orderItems) { 
-          await Commodity.findByPk(i.commodityId)
-          .then(commodity => {
-            commodity.increment({ saleAmount: i.quantity })
-            commodity.decrement({ remainingNumber: i.quantity })
-            if (commodity.dataValues.remainingNumber === i.quantity) {
-              commodity.update({ removed: true})
-            }
-          })
-        }
-      })
-      return res.render('orderSucceed')
+      return res.render('orderSucceed', { orderId })
     }  
   },
   orderRecords: (req, res) => {

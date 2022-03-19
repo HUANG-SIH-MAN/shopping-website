@@ -1,9 +1,13 @@
 <div class="col-sm-8 commodityBody">
-        <div class="commodityTitle container d-flex flex-column align-items-center mt-4 mb-5 p-3">
-        <h1 class="display-4 mr-3 mt-2">交易成功</h1>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <a type="button" class="btn btn-primary" href="/">回首頁</a>
-            <a type="button" class="btn btn-success" href="/order/records">查看購買紀錄</a>
-        </div>
+  <div class="commodityTitle container d-flex flex-column align-items-center mt-4 mb-5 p-3">
+    <h1 class="display-4 mr-3 mt-2">交易成功</h1>
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <a type="button" class="btn btn-primary" href="/">回首頁</a>
+      <a type="button" class="btn btn-success" href="/order/records">查看購買紀錄</a>
     </div>
+  </div>
 </div>
+<div id="orderId"  style="display:none">{{orderId}}</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/javascript/orderSucceed.js"></script>

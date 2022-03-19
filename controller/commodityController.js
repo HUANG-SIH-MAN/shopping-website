@@ -1,6 +1,5 @@
 const { Like } = require('../models')
 const commodityService = require('../services/commodityService')
-const userService = require('../services/userService')
 
 const commodityController = {
   commoditiesPage: async (req, res)=>{
@@ -27,9 +26,8 @@ const commodityController = {
     try {
       const commodityId = Number(req.params.id)
       const commodity = await commodityService.getCommodity(commodityId)
-      const likedUser = [...await userService.likeCommodities(req.user.id)].some(i => i.id === commodityId)
-      const inCart = [...await userService.cartCommodities(req.user.id)].some(i => i.CommodityId === commodityId)
-      console.log(likedUser, inCart)
+      const likedUser = req.user.LikedCommodities.map(d => d.id).includes(commodityId)
+      const inCart = req.user.Carts.map(c => c.commodityId).includes(commodityId)
       return res.render('commodity', { commodity, likedUser, inCart, backURL: req.headers.referer})
     } catch (err) {
       return res.render('error', { err: err.message })

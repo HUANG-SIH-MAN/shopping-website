@@ -67,6 +67,16 @@ const userService = {
       })
       .catch(err => reject(err))
     })
+  },
+  userAccountData: (userId) => {
+    return new Promise((resolve, reject) => {
+      User.findByPk(userId, { 
+        raw: true,
+        attributes: [ 'email', 'password']
+      })
+      .then(user => resolve(user))
+      .catch(err => reject(err))
+    })
   }
 }
 

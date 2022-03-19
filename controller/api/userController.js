@@ -50,6 +50,15 @@ const userController = {
       result: data
     }))
     .catch(err => next(err))
+  },
+  userAccountData: (req, res, next) => {
+    userService.userAccountData(req.user.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      result: data
+    }))
+    .catch(err => next(err))
   }
 }
 

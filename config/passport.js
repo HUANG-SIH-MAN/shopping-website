@@ -28,6 +28,10 @@ module.exports = app => {
           }) 
         }) 
       .catch(err => done(err, false)) 
+    } else if (req.originalUrl === '/users/login/orderBack') {
+      User.findOne({where: { email, password }})
+      .then(user => done(null, user)) 
+      .catch(err => done(err, false))
     } else if (req.originalUrl === '/api/users/login') {
       User.findOne({where: { email: email }})
       .then(user => { 
