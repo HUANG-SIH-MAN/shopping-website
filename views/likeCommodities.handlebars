@@ -1,67 +1,49 @@
 <div class="col-sm-8 commodityBody">
-    <div class="commodityTitle container d-flex flex-column align-items-center mt-5 mb-4 p-3">
-        <h1 class="display-4 mr-3">最愛商品清單</h1>
-        <div class="btn-group m-2" role="group" aria-label="Basic example">
-        <a type="button" class="btn btn-primary" href="/users/account">個人資料</a>
-        <a type="button" class="btn btn-danger" href="/order/records">購買紀錄</a>
-        </div>    
-    </div> 
-    {{>message}}
-    {{#if LikedCommodities}}
-    <ul class="list-unstyled mb-5">
-    {{#each LikedCommodities}}    
-    <li class="media commodityLi m-3">
-        <img src="{{this.image}}" class="mr-3" width="200" height="200">
-        <div class="media-body m-3">
-        <h5 class="mt-0 mb-3">{{this.name}}</h5>
-        <p>價格：{{this.price}}</p>
-        <p>
-          <span class="mr-2">銷售量：{{this.saleAmount}}</span>
-          <span>瀏覽人數：{{this.viewCount}}</span>
-        </p>
-        <p class="ellipsis">{{this.introduction}}</p>
-        <div class="btn-group" role="group" aria-label="Basic example">
-            <a type="button" class="btn btn-primary" href="/commodity/{{this.id}}">詳細資訊</a>
-            {{#if this.removed}}
-            <button type="button" class="btn btn-secondary"><i class="fas fa-shopping-cart mr-2"></i>商品已經下架，無法購買!!</button>
-            {{else}}
-                {{#if this.inCart}}
-                <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart mr-1"></i>已加入</button>
-                {{else}}
-                <button type="button" class="btn btn-success addCart" data-id="{{this.id}}"><i class="fas fa-shopping-cart mr-2" data-id="{{this.id}}"></i>放入購物車</button>
-                {{/if}}            
-            {{/if}}
-        </div>
-        </div>
-    </li>
-    {{/each}}
-    </ul> 
-    {{else}} 
-        <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
-        沒有最愛商品，趕快到商品頁面尋找吧!!
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        </div>
-    {{/if}}   
+  <div class="commodityTitle container d-flex flex-column align-items-center mt-5 mb-4 p-3">
+    <h1 class="display-4 mr-3">最愛商品清單</h1>
+    <div class="btn-group m-2" role="group" aria-label="Basic example">
+    <a type="button" class="btn btn-primary" href="/users/account">個人資料</a>
+    <a type="button" class="btn btn-danger" href="/order/records">購買紀錄</a>
+    </div>  
+  </div> 
+  {{>message}}
+  {{#if LikedCommodities}}
+  <ul class="list-unstyled mb-5">
+  {{#each LikedCommodities}}  
+  <li class="media commodityLi m-3">
+    <img src="{{this.image}}" class="mr-3" width="200" height="200">
+    <div class="media-body m-3">
+    <h5 class="mt-0 mb-3">{{this.name}}</h5>
+    <p>價格：{{this.price}}</p>
+    <p>
+      <span class="mr-2">銷售量：{{this.saleAmount}}</span>
+      <span>瀏覽人數：{{this.viewCount}}</span>
+    </p>
+    <p class="ellipsis">{{this.introduction}}</p>
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <a type="button" class="btn btn-primary" href="/commodity/{{this.id}}">詳細資訊</a>
+      {{#if this.removed}}
+      <button type="button" class="btn btn-secondary"><i class="fas fa-shopping-cart mr-2"></i>商品已經下架，無法購買!!</button>
+      {{else}}
+        {{#if this.inCart}}
+        <button type="button" class="btn btn-success"><i class="fas fa-shopping-cart mr-1"></i>已加入</button>
+        {{else}}
+        <button type="button" class="btn btn-success addCart" data-id="{{this.id}}"><i class="fas fa-shopping-cart mr-2" data-id="{{this.id}}"></i>放入購物車</button>
+        {{/if}}      
+      {{/if}}
+    </div>
+    </div>
+  </li>
+  {{/each}}
+  </ul> 
+  {{else}} 
+    <div class="alert alert-danger alert-dismissible fade show m-4" role="alert">
+    沒有最愛商品，趕快到商品頁面尋找吧!!
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+  {{/if}}   
 </div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script>
-    document.addEventListener('click', event => {
-        const target = event.target
-        const commodityID = target.dataset.id
-        if (target.matches('.addCart')) {
-		    axios.post(`/cart/${commodityID}`)
-		    .then(()=> {
-                target.classList.remove('addCart')
-                target.innerHTML = '<i class="fas fa-shopping-cart mr-1"></i>已加入'
-             })	
-        } else if (target.matches('.fa-shopping-cart')) {
-            axios.post(`/cart/${commodityID}`)
-			.then(()=> {
-                target.parentElement.classList.remove('addCart')
-                target.parentElement.innerHTML = '<i class="fas fa-shopping-cart mr-1"></i>已加入'
-            })
-        }
-    })
-</script>
+<script src="/javascript/likeCommodities.js"></script>

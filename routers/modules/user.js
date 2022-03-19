@@ -13,7 +13,6 @@ router.get('/register', userController.registerPage)
 router.post('/register', userController.register)
 router.get('/login', userController.loginPage)
 router.post('/login',passport.authenticate('local', {
-    successRedirect: '/',
     failureRedirect: '/users/login',
     failureFlash: true
 }) ,userController.login)

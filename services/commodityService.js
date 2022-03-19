@@ -23,7 +23,6 @@ const commodityService = {
   getCommodity: (id) => {
     return new Promise((resolve, reject) => {
       Commodity.findByPk(id, {
-        raw: true,
         attributes: { 
           include: [[sequelize.literal('(SELECT name FROM Categories WHERE id = categoryId)'), 'CategoryName']],
           exclude: ['createdAt', 'updatedAt'] 
@@ -31,8 +30,8 @@ const commodityService = {
       })
       .then(commodity => {
         if (!commodity) throw new Error('輸入錯誤商品id，查詢不到相關資料')
-        // commodity.increment({viewCount: 1})
-        return resolve(commodity)
+        commodity.increment({viewCount: 1})
+        return resolve(commodity.toJSON())
       })
       .catch(err => reject(err))
     })

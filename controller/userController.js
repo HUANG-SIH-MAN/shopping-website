@@ -8,6 +8,7 @@ const moment = require('moment')
 const fs = require('fs')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
+const jwt = require('jsonwebtoken')
 
 const userController = {
   registerPage: (req, res) => {
@@ -41,7 +42,13 @@ const userController = {
     return res.render('login')
   },
   login: (req, res) => {
-    return res.render('/')
+    const userData = req.user.toJSON()
+    delete userData.password
+    delete userData.createdAt
+    delete userData.updatedAt
+    const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' })
+    req.flash('token', token)
+    return res.redirect('/')
   },
   logout: (req, res) => {
     req.logout()

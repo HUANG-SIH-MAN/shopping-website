@@ -5,6 +5,8 @@ const userController = {
   login: (req, res, next) => {
     const userData = req.user.toJSON()
     delete userData.password
+    delete userData.createdAt
+    delete userData.updatedAt
     const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' })
     res.json({
       status: 'success',
