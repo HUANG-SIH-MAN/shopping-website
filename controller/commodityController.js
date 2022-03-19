@@ -1,29 +1,23 @@
 const db = require('../models')
-const Commodity = db.Commodity
-const Category = db.Category
-const User = db.User
 const Like = db.Like
-const Cart = db.Cart
-const { Op } = require('sequelize')
+const commodityService = require('../services/commodityService')
+const userService = require('../services/userService')
 
 const commodityController = {
   commoditiesPage: async (req, res)=>{
-    const categoryId = 'all'
-    const category = await Category.findAll({raw: true, nest: true})
-    Commodity.findAll({ 
-      where: { removed: false },
-      include: [ Category ],
-      order: [['viewCount', "DESC"]] 
-    })
-    .then(commodity => {
-      const result = commodity.map(i =>({
-        ...i.dataValues,
-        Category: i.dataValues.Category.dataValues,
+    try {
+      const categoryId = 'all'
+      const category = await commodityService.getCategories()
+      const commodity = await commodityService.getCommodities(false)
+      const result = commodity.map(i => ({
+        ...i,
         likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id),
         inCart: req.user.Carts.map(c => c.commodityId).includes(i.id)
       }))
       return res.render('index', { commodity: result, category, categoryId })
-    })
+    } catch (err) {
+      return res.render('error', { err })
+    }
   },
   commodityPage: (req, res) => {
     Commodity.findByPk(req.params.id, {
@@ -40,48 +34,47 @@ const commodityController = {
       return res.render('commodity', { commodity: commodity.toJSON(), likedUser, inCart, backURL: req.headers.referer})
     })
   },
+  // commodityPage: async (req, res) => {
+  //   try {
+  //     const commodity = await commodityService.getCommodity(req.params.id)
+  //     // const likedUser = [...await userService.likeCommodities(req.user.id)].some(i => i.id === req.params.id)
+  //     // const inCart = [...await userService.cartCommodities(req.user.id)].some(i => i.CommodityId === req.params.id)
+  //     const likedUser = await userService.likeCommodities(req.user.id)
+  //     const inCart = await userService.cartCommodities(req.user.id)
+  //     console.log(likedUser, inCart)
+  //     return res.render('commodity', { commodity, likedUser, inCart, backURL: req.headers.referer})
+  //   } catch (err) {
+  //     return res.render('error', { err })
+  //   }
+  // },
   useCategoryfindCommodity: async (req, res)=>{
-    const category = await Category.findAll({raw: true, nest: true})
-    const categoryId = req.params.id
-    Commodity.findAll({ 
-      where: { removed: false, categoryId },
-      include: [ Category ],
-      order: [['viewCount', "DESC"]]
-    })
-    .then(commodity => {
-      let searchError = ''
-      if (commodity.length === 0) {
-        searchError = '該分類目前還沒有商品，請耐心等待商家上架!!'
-      }
-      const result = commodity.map(i =>({
-        ...i.dataValues,
-        Category: i.dataValues.Category.dataValues,
+    try {
+      const categoryId = req.params.id
+      const category = await commodityService.getCategories()
+      const commodity = await commodityService.useCategoryfindCommodity(categoryId, false)
+      const result = commodity.map(i => ({
+        ...i,
         likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id),
         inCart: req.user.Carts.map(c => c.commodityId).includes(i.id)
       }))
-      return res.render('index', { commodity: result, category, categoryId, searchError })
-    })
+      return res.render('index', { commodity: result, category, categoryId })
+    } catch (err) {
+      return res.render('error', { err })
+    }
   },
   searchCommodity: async (req, res) => {
-    const category = await Category.findAll({raw: true, nest: true})
-    Commodity.findAll({
-      where: { removed: false, name:{ [Op.like]: `%${req.query.name}%` } },
-      include: [ Category ],
-      order: [['viewCount', "DESC"]]
-    })
-    .then(commodity => {
-      let searchError = ''
-      if (commodity.length === 0) {
-        searchError = '搜尋不到相關產品!!請重新輸入關鍵字'
-      }
-      const result = commodity.map(i =>({
-        ...i.dataValues,
-        Category: i.dataValues.Category.dataValues,
+    try {
+      const category = await commodityService.getCategories()
+      const commodity = await commodityService.searchCommodity(req.query.name)
+      const result = commodity.map(i => ({
+        ...i,
         likedUser: req.user.LikedCommodities.map(d => d.id).includes(i.id),
         inCart: req.user.Carts.map(c => c.commodityId).includes(i.id)
       }))
-      return res.render('index', { commodity: result, category, searchError })
-    })
+      return res.render('index', { commodity: result, category })
+    } catch (err) {
+      return res.render('error', { err })
+    }
   },
   addLike: (req, res) => {
     Like.create({

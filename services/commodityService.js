@@ -31,6 +31,7 @@ const commodityService = {
       })
       .then(commodity => {
         if (!commodity) throw new Error('輸入錯誤商品id，查詢不到相關資料')
+        // commodity.increment({viewCount: 1})
         return resolve(commodity)
       })
       .catch(err => reject(err))
@@ -38,19 +39,23 @@ const commodityService = {
   },
   useCategoryfindCommodity: (categoryId, removed) => {
     return new Promise((resolve, reject) => {
-      Commodity.findAll({
-        raw: true,
-        nest: true,
-        group: 'id',
-        where: { categoryId, removed },
-        attributes: { 
-          include: [[sequelize.literal('(SELECT name FROM Categories WHERE id = categoryId)'), 'CategoryName']],
-          exclude: ['createdAt', 'updatedAt'] 
-        },
-        order: [['viewCount', "DESC"]],
-      })
-      .then(commodity => {
-        if (commodity.length === 0) throw new Error('輸入錯誤商品分類id，查詢不到相關資料')
+      Promise.all([
+        Commodity.findAll({
+          raw: true,
+          nest: true,
+          group: 'id',
+          where: { categoryId, removed },
+          attributes: { 
+            include: [[sequelize.literal('(SELECT name FROM Categories WHERE id = categoryId)'), 'CategoryName']],
+            exclude: ['createdAt', 'updatedAt'] 
+          },
+          order: [['viewCount', "DESC"]],
+        }),
+        Category.findByPk(categoryId)
+      ])
+      .then(([commodity, category]) => {
+        if(!category) throw new Error('輸入錯誤商品分類id，查詢不到相關資料')
+        if (commodity.length === 0) throw new Error('該分類目前還沒有商品，請耐心等待商家上架!!')
         return resolve(commodity)
       })
       .catch(err => reject(err))
