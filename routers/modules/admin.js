@@ -1,10 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const adminController = require('../../controller/adminController')
-
-//上傳檔案設定
-const multer = require('multer')
-const upload = multer({ dest: 'temp/' })
+const upload = require('../../utils/multerUpload')
 
 //商品CRUD
 //商品清單總表

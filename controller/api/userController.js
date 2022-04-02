@@ -1,4 +1,5 @@
 const userService = require('../../services/userService')
+const { checkString } = require('../../utils/checkDataFormat')
 const jwt = require('jsonwebtoken')
 
 const userController = {
@@ -22,8 +23,8 @@ const userController = {
     // 填入資料檢驗
     const pattern = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
     if (!pattern.test(email)) throw new Error('信箱格式不正確')
-    if(password === undefined || password.trim() === '') throw new Error('密碼為必填項目')
-    if(name === undefined || name.trim() === '') throw new Error('姓名為必填項目')
+    if(checkString(password)) throw new Error('密碼為必填項目')
+    if(checkString(name)) throw new Error('姓名為必填項目')
     
     userService.register(name, email, password)
     .then(message => 
