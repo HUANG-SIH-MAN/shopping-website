@@ -40,7 +40,7 @@ const adminController = {
     }))
     .catch(err => next(err))
   },
-  addCommodity : (req, res, next) => {
+  addCommodity: (req, res, next) => {
     const { name, price, remainingNumber, CategoryId, introduction } = req.body
     const { file } = req
 
@@ -60,7 +60,7 @@ const adminController = {
     }))
     .catch(err => next(err))
   },
-  editCommodity : (req, res, next) => {
+  editCommodity: (req, res, next) => {
     const { name, price, remainingNumber, CategoryId, introduction } = req.body
     const { file } = req
 
@@ -72,6 +72,33 @@ const adminController = {
     if(!checkString(introduction)) throw new Error('introduction為必填項目')
     if(file === undefined) throw new Error('圖片為必填項目')
     adminService.editCommodity(req.params.id, name, price, remainingNumber, CategoryId, introduction, file)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
+    }))
+    .catch(err => next(err))
+  },
+  removedCommodity: (req, res, next) => {
+    adminService.removedCommodity(req.params.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
+    }))
+    .catch(err => next(err))
+  },
+  undoRemovedCommodity: (req, res, next) => {
+    adminService.undoRemovedCommodity(req.params.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
+    }))
+    .catch(err => next(err))
+  },
+  deleteCommodity: (req, res, next) => {
+    adminService.deleteCommodity(req.params.id)
     .then(data => 
       res.status(200).json({
       status: 'success',
