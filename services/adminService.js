@@ -80,6 +80,35 @@ const adminService = {
       })
       .catch(err => reject(err))
     })
+  },
+  addCategory: (name) => {
+    return new Promise((resolve, reject) => {
+      Category.create({name})
+      .then(() => resolve('成功新增商品類別'))
+      .catch(err => reject(err))
+    })
+  },
+  editCategory: (id, name) => {
+    return new Promise((resolve, reject) => {
+      Category.findByPk(id)
+      .then(category => {
+        if(!category) throw new Error('輸入錯誤的類別Id，該類別不存在')
+        category.update({name})
+        return resolve('成功修改商品類別')
+      })
+      .catch(err => reject(err))
+    })
+  },
+  deleteCategory: (id) => {
+    return new Promise((resolve, reject) => {
+      Category.findByPk(id)
+      .then(category => {
+        if(!category) throw new Error('輸入錯誤的類別Id，該類別不存在')
+        category.destroy()
+        return resolve('成功刪除商品類別')
+      })
+      .catch(err => reject(err))
+    })
   }
 }
 

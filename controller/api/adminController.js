@@ -105,6 +105,35 @@ const adminController = {
       message: data
     }))
     .catch(err => next(err))
+  },
+  addCategory: (req, res, next) => {
+    if(!checkString(req.body.name)) throw new Error('name為必填項目')
+    adminService.addCategory(req.body.name)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
+    }))
+    .catch(err => next(err))
+  },
+  editCategory: (req, res, next) => {
+    if(!checkString(req.body.name)) throw new Error('name為必填項目')
+    adminService.editCategory(req.params.id, req.body.name)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
+    }))
+    .catch(err => next(err))
+  },
+  deleteCategory: (req, res, next) => {
+    adminService.deleteCategory(req.params.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
+    }))
+    .catch(err => next(err))
   }
 }
 
