@@ -71,10 +71,43 @@ const orderService = {
         // 更新商品銷售量
         for (let i of orderData) {
           const commodity = await Commodity.findByPk(i.commodityId)
-          commodity.increment({ saleAmount: i.quantity }, { transaction: t })
+          await commodity.increment({ saleAmount: i.quantity }, { transaction: t })
         }
         await t.commit()
         return resolve('成功更新交易資料')
+      } catch (err) {
+        await t.rollback()
+        return reject(err)
+      }
+    })
+  },
+  failOrder: (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      const t = await sequelize.transaction()
+      try {
+        // 找出訂單的內容有哪些
+        const orderItem = await OrderItem.findAll({
+          raw: true,
+          nest: true,
+          attributes: ['quantity', 'commodityId'],
+          where: { orderId }
+        })
+
+        // 將預留的庫存返回原樣
+        for (let i of orderItem) {
+          const commodity = await Commodity.findByPk(i.commodityId, { attributes: ['removed']})
+          if (commodity.dataValues.removed) {
+            await commodity.update({removed: false}, { transaction: t })
+          }
+          await commodity.increment({ remainingNumber: i.quantity }, { transaction: t })
+        }
+
+        // 刪除交易失敗的訂單
+        await OrderItem.destroy({where: { orderId }}, { transaction: t })
+        await Order.destroy({where: { id: orderId }}, { transaction: t })
+
+        await t.commit()
+        return resolve('成功刪除交易失敗訂單')
       } catch (err) {
         await t.rollback()
         return reject(err)

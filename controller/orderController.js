@@ -31,12 +31,20 @@ const orderController = {
     }
   },
   mpgatewayCallback: async (req, res) => {
-    if (req.body.Status === 'SUCCESS') {
+    try {
       // 解密交易資訊
       const TradeInfo = JSON.parse(newebpay.decryptTradeInfoAES(req.body.TradeInfo))
       const orderId = Number(TradeInfo['Result']['MerchantOrderNo'].slice(10))
-      return res.render('orderSucceed', { orderId })
-    }  
+      if (req.body.Status === 'SUCCESS') {
+        return res.render('orderSucceed', { orderId })
+      } else {
+        await orderService.failOrder(orderId)
+        return res.render('error', { err: '交易失敗，請重新結帳' })
+      }
+    } catch (err) {
+      return res.render('error', { err: err.message })
+    }
+    
   },
   orderRecords: (req, res) => {
     Order.findAll({
