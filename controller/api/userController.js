@@ -23,8 +23,8 @@ const userController = {
     // 填入資料檢驗
     const pattern = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
     if (!pattern.test(email)) throw new Error('信箱格式不正確')
-    if(checkString(password)) throw new Error('密碼為必填項目')
-    if(checkString(name)) throw new Error('姓名為必填項目')
+    if(!checkString(password)) throw new Error('密碼為必填項目')
+    if(!checkString(name)) throw new Error('姓名為必填項目')
     
     userService.register(name, email, password)
     .then(message => 
@@ -58,6 +58,33 @@ const userController = {
       res.status(200).json({
       status: 'success',
       result: data
+    }))
+    .catch(err => next(err))
+  },
+  userData: (req, res, next) => {
+    userService.userData(req.user.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      result: data
+    }))
+    .catch(err => next(err))
+  },
+  editUserData: (req, res, next) => {
+    const { name, email, phone, address } = req.body
+    const { file } = req
+    // 檢查格式是否正確
+    const pattern = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+    if (!pattern.test(email)) throw new Error('信箱格式不正確')
+    if(!checkString(name)) throw new Error('姓名為必填項目')
+    if(!checkString(phone)) throw new Error('電話為必填項目')
+    if(!checkString(address)) throw new Error('地址為必填項目')
+
+    userService.editUserData(req.user.id, name, email, phone, address, file)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      message: data
     }))
     .catch(err => next(err))
   }

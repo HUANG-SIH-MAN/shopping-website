@@ -5,6 +5,7 @@ module.exports = {
   },
   checkNumber: (number) => {
     if (number === undefined || isNaN(Number(number))) return false
+    if (number < 0) return false
     return true
   }
 }

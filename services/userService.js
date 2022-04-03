@@ -1,6 +1,7 @@
 const { User, Commodity, Like, Cart } = require('../models')
 const sequelize = require('sequelize')
 const bcrypt = require('bcryptjs')
+const imgurUpload = require('../utils/imgurUpload')
 
 const userService = {
   register: (name, email, password) => {
@@ -76,6 +77,39 @@ const userService = {
       })
       .then(user => resolve(user))
       .catch(err => reject(err))
+    })
+  },
+  userData: (userId) => {
+    return new Promise((resolve, reject) => {
+      User.findByPk(userId, {
+        raw: true,
+        attributes: {
+          exclude: ['password', 'isAdmin', 'createdAt', 'updatedAt']
+        }
+      })
+      .then(user => resolve(user))
+      .catch(err => reject(err))
+    })
+  },
+  editUserData: (userId, name, email, phone, address, file) => {
+    return new Promise(async(resolve, reject) => {
+      try {
+        if (!file) {
+          await User.update(
+            { name, email, phone, address }, 
+            { where: { id: userId }}
+          )
+        } else {
+          await User.update({ 
+            name, email, phone, address,
+            image: await imgurUpload(file)
+            }, { where: { id: userId }}
+          )
+        }
+        return resolve('更新個人資料成功')
+      } catch (err) {
+        return reject(err)
+      }
     })
   }
 }

@@ -32,14 +32,24 @@ const adminService = {
         if (!category) throw new Error('輸入錯誤的商品類別')
         const commodity =  await Commodity.findByPk(id, { attributes: ['id'], transaction: t })
         if (!commodity) throw new Error('輸入錯誤的商品Id')
-        await Commodity.update({
-          name,
-          price,
-          remainingNumber, 
-          CategoryId, 
-          introduction, 
-          image: await imgurUpload(imageFile),
-        }, { where: { id }, transaction: t })     
+        if (imageFile) {
+          await Commodity.update({
+            name,
+            price,
+            remainingNumber, 
+            CategoryId, 
+            introduction, 
+            image: await imgurUpload(imageFile)
+          }, { where: { id }, transaction: t })
+        } else {
+          await Commodity.update({
+            name,
+            price,
+            remainingNumber, 
+            CategoryId, 
+            introduction, 
+          }, { where: { id }, transaction: t })
+        }   
         await t.commit()
         return resolve('成功修改商品資料')
       } catch (err) {

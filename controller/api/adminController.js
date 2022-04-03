@@ -70,7 +70,6 @@ const adminController = {
     if(!checkNumber(remainingNumber)) throw new Error('remainingNumber格式輸入錯誤')
     if(!checkNumber(CategoryId)) throw new Error('CategoryId格式輸入錯誤')
     if(!checkString(introduction)) throw new Error('introduction為必填項目')
-    if(file === undefined) throw new Error('圖片為必填項目')
     adminService.editCommodity(req.params.id, name, price, remainingNumber, CategoryId, introduction, file)
     .then(data => 
       res.status(200).json({
