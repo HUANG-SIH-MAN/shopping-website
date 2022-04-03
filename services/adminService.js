@@ -1,6 +1,5 @@
-const { Commodity, Category } = require('../models')
+const { Commodity, Category, sequelize } = require('../models')
 const imgurUpload = require('../utils/imgurUpload')
-const { sequelize } = require('../models')
 
 const adminService = {
   addCommodity: async (name, price, remainingNumber, CategoryId, introduction, imageFile) => {
