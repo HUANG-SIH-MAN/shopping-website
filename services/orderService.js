@@ -95,7 +95,7 @@ const orderService = {
 
         // 將預留的庫存返回原樣
         for (let i of orderItem) {
-          const commodity = await Commodity.findByPk(i.commodityId, { attributes: ['removed']})
+          const commodity = await Commodity.findByPk(i.commodityId, { attributes: ['id', 'removed']})
           if (commodity.dataValues.removed) {
             await commodity.update({removed: false}, { transaction: t })
           }
