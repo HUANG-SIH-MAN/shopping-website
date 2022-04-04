@@ -90,6 +90,19 @@ const commodityService = {
       .catch(err => reject(err))
     })
   },
+  getCategoriesAndCommodities: () => {
+    return new Promise((resolve, reject) => {
+      Category.findAll({ 
+        attributes: ['id', 'name'],
+        include: [{ 
+          model: Commodity,
+          attributes: ['id', 'name', 'image']
+        }]
+      })
+      .then(category => resolve(category))
+      .catch(err => reject(err))
+    })
+  },
   likeCommodity: (UserId, CommodityId) => {
     return new Promise((resolve, reject) => {
       Like.findOrCreate({

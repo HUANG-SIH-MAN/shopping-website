@@ -21,6 +21,7 @@ const orderService = {
           where: { userId },
           having: { removed: false }
         })
+        if (cartData.length === 0) throw new Error('該使用者購物車內並沒有商品')
 
         // 判斷是否庫存足夠，足夠再預留商品數量給使用者結帳購買
         for (let i of cartData) {
@@ -58,16 +59,22 @@ const orderService = {
     return new Promise(async (resolve, reject) => {
       const t = await sequelize.transaction()
       try {
+      
+      // 更新訂單內容
+      const order = await Order.findByPk(orderId, { attributes: ['id', 'status']})
+      if (!order) throw new Error('輸入錯誤的訂單Id')
+      if (order.dataValues.status) throw new Error('該訂單已經更新過了')
+      await order.update({ status: true }, { transaction: t })
+      const orderData = await OrderItem.findAll({
+        raw: true,
+        nest: true,
+        where: { orderId },
+        attributes: ['commodityId', 'quantity']
+      })
+
         // 清空購物車
         await Cart.destroy({where: { userId }}, { transaction: t })
-        // 更新訂單內容
-        await Order.update({ status: true }, { where: { id: orderId}, transaction: t})
-        const orderData = await OrderItem.findAll({
-          raw: true,
-          nest: true,
-          where: { orderId },
-          attributes: ['commodityId', 'quantity']
-        })
+
         // 更新商品銷售量
         for (let i of orderData) {
           const commodity = await Commodity.findByPk(i.commodityId)
@@ -85,6 +92,11 @@ const orderService = {
     return new Promise(async (resolve, reject) => {
       const t = await sequelize.transaction()
       try {
+        // 確認輸入正確的訂單Id
+        const order = await Order.findByPk(orderId, { attributes: ['id', 'status']})
+        if (!order) throw new Error('輸入錯誤的訂單Id')
+        if (order.dataValues.status) throw new Error('該訂單已完成')
+        
         // 找出訂單的內容有哪些
         const orderItem = await OrderItem.findAll({
           raw: true,
