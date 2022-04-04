@@ -10,6 +10,7 @@ router.post('/login', passport.authenticate('local', { session: false }), userCo
 router.post('/register', userController.register)
 router.get('/likeCommodities', authenticatedAPI, userController.likeCommodities)
 router.get('/cartCommodities', authenticatedAPI, userController.cartCommodities)
+router.get('/orderRecord', authenticatedAPI, userController.orderRecord)
 router.get('/userAccountData', authenticatedAPI, userController.userAccountData)
 router.get('/userData', authenticatedAPI, userController.userData)
 router.put('/userData', authenticatedAPI, upload.single('image'), userController.editUserData)

@@ -17,6 +17,7 @@ router.get('/category/:id', paramsChecker, adminController.useCategoryfindCommod
 router.put('/category/:id', paramsChecker, adminController.editCategory)
 router.delete('/category/:id', paramsChecker, adminController.deleteCategory)
 router.post('/category', adminController.addCategory)
+router.get('/userData', adminController.userData)
 router.use('/', apiErrorHandler)
 
 module.exports = router

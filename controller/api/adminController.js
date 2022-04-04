@@ -133,6 +133,15 @@ const adminController = {
       message: data
     }))
     .catch(err => next(err))
+  },
+  userData: (req, res, next) => {
+    adminService.userData()
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      result: data
+    }))
+    .catch(err => next(err))
   }
 }
 

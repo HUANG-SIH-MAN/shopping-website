@@ -1,4 +1,4 @@
-const { User, Commodity, Like, Cart } = require('../models')
+const { User, Commodity, Like, Cart, Order, OrderItem } = require('../models')
 const sequelize = require('sequelize')
 const bcrypt = require('bcryptjs')
 const imgurUpload = require('../utils/imgurUpload')
@@ -110,6 +110,26 @@ const userService = {
       } catch (err) {
         return reject(err)
       }
+    })
+  },
+  orderRecord: (userId) => {
+    return new Promise((resolve, reject)=> {
+      Order.findAll({
+        where: { userId, status: true },
+        attributes: ['updatedAt', 'totalAmount', 'address'],
+        include: [{ 
+          model: OrderItem, 
+          attributes: [
+            'commodityId',
+            'quantity',
+            'price',
+            [sequelize.literal('(SELECT name FROM Commodities WHERE id = commodityId)'), 'commodityName'],
+            [sequelize.literal('(SELECT image FROM Commodities WHERE id = commodityId)'), 'commodityImage']
+          ]
+        }]
+      })
+      .then(order => resolve(order))
+      .catch(err => reject(err))
     })
   }
 }

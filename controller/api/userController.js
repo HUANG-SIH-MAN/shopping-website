@@ -87,6 +87,15 @@ const userController = {
       message: data
     }))
     .catch(err => next(err))
+  },
+  orderRecord: (req, res, next) => {
+    userService.orderRecord(req.user.id)
+    .then(data => 
+      res.status(200).json({
+      status: 'success',
+      result: data
+    }))
+    .catch(err => next(err))
   }
 }
 

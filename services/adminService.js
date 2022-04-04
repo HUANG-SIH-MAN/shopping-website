@@ -1,4 +1,4 @@
-const { Commodity, Category, sequelize } = require('../models')
+const { User, Commodity, Category, sequelize } = require('../models')
 const imgurUpload = require('../utils/imgurUpload')
 
 const adminService = {
@@ -117,6 +117,25 @@ const adminService = {
         category.destroy()
         return resolve('成功刪除商品類別')
       })
+      .catch(err => reject(err))
+    })
+  },
+  userData: () => {
+    return new Promise((resolve, reject) => {
+      User.findAll({
+        raw: true,
+        nest: true,
+        where: { isAdmin: false },
+        group: 'User.id',
+        attributes: {
+          include: [
+          [sequelize.literal('(SELECT COUNT (DISTINCT id) FROM Orders WHERE userId = User.id AND status = true)'), 'buyNumber'],
+          [sequelize.literal('(SELECT SUM (totalAmount) FROM Orders WHERE userId = User.id AND status = true)'), 'totalAmount']
+          ],
+          exclude: ['password', 'isAdmin', 'createdAt', 'updatedAt']
+        }
+      })
+      .then(user => resolve(user))
       .catch(err => reject(err))
     })
   }
