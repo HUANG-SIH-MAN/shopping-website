@@ -1,4 +1,4 @@
-const { User, Commodity, Category, sequelize } = require('../models')
+const { User, Commodity, Category, OrderItem, sequelize } = require('../models')
 const imgurUpload = require('../utils/imgurUpload')
 
 const adminService = {
@@ -81,14 +81,19 @@ const adminService = {
     })
   },
   deleteCommodity: (id) => {
-    return new Promise((resolve, reject) => {
-      Commodity.findByPk(id)
-      .then(commodity => {
+    return new Promise(async(resolve, reject) => {
+      try {
+        const commodity = await Commodity.findByPk(id, { attributes: ['id']})
         if (!commodity) throw new Error('輸入錯誤的商品id，該商品不存在')
+        const orderItem = await OrderItem.findOne({
+          where: { commodityId: id}
+        })
+        if (orderItem) throw new Error('該商品已有消費者購買，無法刪除')
         commodity.destroy()
         return resolve('成功刪除商品')
-      })
-      .catch(err => reject(err))
+      } catch (err) {
+        return reject(err)
+      }
     })
   },
   addCategory: (name) => {
@@ -110,14 +115,17 @@ const adminService = {
     })
   },
   deleteCategory: (id) => {
-    return new Promise((resolve, reject) => {
-      Category.findByPk(id)
-      .then(category => {
+    return new Promise(async(resolve, reject) => {
+      try {
+        const category = await Category.findByPk(id, { attributes: ['id']})
         if(!category) throw new Error('輸入錯誤的類別Id，該類別不存在')
+        const commodity = await Commodity.findOne({where: { categoryId: id}})
+        if(commodity) throw new Error('該類別已經有商品資料，不可以刪除')
         category.destroy()
         return resolve('成功刪除商品類別')
-      })
-      .catch(err => reject(err))
+      } catch (err) {
+        return reject(err)
+      }
     })
   },
   userData: () => {

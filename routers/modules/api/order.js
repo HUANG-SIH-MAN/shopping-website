@@ -6,7 +6,7 @@ const { paramsChecker } = require('../../../middleware/check-params')
 
 router.put('/createOrder', orderController.createOrder)
 router.put('/updateOrder/:id', paramsChecker, orderController.updateOrder)
-router.put('/failOrder/:id', paramsChecker, orderController.failOrder)
+router.delete('/failOrder/:id', paramsChecker, orderController.failOrder)
 router.use('/', apiErrorHandler)
 
 module.exports = router
